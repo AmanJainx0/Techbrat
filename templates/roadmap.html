@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechBrat Roadmap</title>
+  {% load static %}
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    #roadmap-container .roadmap-step {
+      padding: 18px;
+      margin: 14px 0;
+      background: #1e293b;
+      border-left: 4px solid #00eaff;
+      border-radius: 10px;
+      transition: transform 0.25s ease;
+    }
+
+    #roadmap-container .roadmap-step:hover {
+      transform: translateX(6px);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="{% static 'images/bglogo.png' %}" alt="techBrat logo" width="40" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:index' %}">
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:que' %}">Career Paths</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#resources">Resources</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#learning-journey">Learning Journey</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:issue' %}">Issue Assistance</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link active">Explore Roadmap</a>
+          </li>
+
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+              <div class="profile-dropdown">
+                <button class="profile-btn" onclick="toggleProfileMenu(event)">
+                  <div class="profile-icon">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <span class="d-none d-md-inline">{{ user.first_name|default:user.username }}</span>
+                </button>
+
+                <div class="dropdown-menu-custom" id="profileMenu">
+                  <div class="user-email">{{ user.email }}</div>
+                  
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-user-circle"></i>
+                    <span>View Profile</span>
+                  </a>
+
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                  </a>
+
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-heart"></i>
+                    <span>Saved Items</span>
+                  </a>
+
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-download"></i>
+                    <span>Downloads</span>
+                  </a>
+
+                  <div class="dropdown-divider-custom"></div>
+
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                  </a>
+
+                  <a href="#" class="dropdown-item-custom">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help & Support</span>
+                  </a>
+
+                  <div class="dropdown-divider-custom"></div>
+
+                  <a href="{% url 'techbrat:signout' %}" class="dropdown-item-custom danger">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                  </a>
+                </div>
+              </div>
+            {% else %}
+              <a href="{% url 'techbrat:signin' %}" class="btn btn-primary ms-3">Get Started</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ Input Box for Custom Roadmap -->
+  <section class="container text-center mt-5">
+    <h1 class="fw-bold">Generate Your Learning Roadmap</h1>
+    <p class="text-warning">Enter a topic and generate roadmap (Ex: MERN Roadmap)</p>
+
+    <div class="input-group mb-3 w-75 mx-auto">
+      <input type="text" id="roadmapInput" class="form-control" placeholder="Ex: MERN Roadmap" />
+      <button class="btn btn-primary" onclick="generateRoadmap()">
+        Generate
+      </button>
+    </div>
+  </section>
+
+    
+
+  <!-- ✅ Generated Roadmap Display -->
+  <section class="container mt-5">
+    <div id="roadmap-container" class="px-4 py-3"></div>
+  </section>
+
+  <!-- ✅ Roadmap Cards -->
+<section class="container mt-5">
+  <div class="row g-4">
+
+    <!-- ✅ Cloud Computing -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/cloud.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">Cloud Computing</h5>
+        <p>Build apps on AWS / Azure, scaling efficiently.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('Cloud Computing Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+    <!-- ✅ MERN Stack -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/react-native.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">MERN Stack</h5>
+        <p>Frontend + Backend using MongoDB, Express, React, Node.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('MERN Stack Developer Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+    <!-- ✅ AI / Machine Learning -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/artificial-intelligence.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">AI & Machine Learning</h5>
+        <p>Learn ML, Deep Learning, Python, TensorFlow, PyTorch.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('AI and Machine Learning Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+    <!-- ✅ Cyber Security -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/fluency/96/lock.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">Cyber Security</h5>
+        <p>Become an ethical hacker / penetration tester.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('Cyber Security Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+    <!-- ✅ Data Science -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/combo-chart.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">Data Science</h5>
+        <p>Data analytics, statistics, PowerBI, ML workflows.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('Data Science Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+    <!-- ✅ Android Development -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/android-os.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold" style="color: #2563eb">Android Development</h5>
+        <p>Build Android apps using Kotlin or Flutter.</p>
+        <a href="javascript:void(0)" class="btn btn-success mt-2"
+          onclick="generateRoadmap('Android Development Roadmap')">Explore Roadmap</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+  
+
+  <!-- Import roadmap.js -->
+   
+  <script src="{% static 'js/roadmap.js' %}"></script>
+  
+  <script>
+    function toggleProfileMenu(event) {
+      event.preventDefault();
+      const menu = document.getElementById('profileMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('profileMenu');
+      const profileBtn = document.querySelector('.profile-btn');
+      if (menu && !e.target.closest('.profile-dropdown')) {
+        menu.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>

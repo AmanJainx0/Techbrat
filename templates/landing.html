@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>techBrat - Your Tech Career Guide</title>
+  {% load static %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+</head>
+
+<body>
+  <div class="landing-container">
+    <!-- LEFT SIDE -->
+    <div class="landing-left">
+      <div class="landing-left-content">
+        <div class="landing-logo">
+          <img src="{% static 'images/bglogo.png' %}" alt="techBrat logo" />
+        </div>
+
+        <h1>Be the Brat Who Masters Tech</h1>
+
+        <p>
+          Explore the right tech career path with step-by-step guidance, curated resources, and personalized mentorship.
+        </p>
+
+        <div class="landing-features">
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-text">Personalized Career Paths</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📚</div>
+            <div class="feature-text">Curated Learning Resources</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🚀</div>
+            <div class="feature-text">Step-by-Step Roadmaps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="landing-right">
+      <div class="messages-container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          {% if "not found" in message|lower %}
+          <br><small class="mt-2 d-block">
+            <a href="#" class="alert-link fw-bold" onclick="switchTab('signup');">Click here to create an account</a>
+          </small>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="auth-tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+          <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- SIGN IN FORM -->
+        <div id="signin-tab" class="tab-content active">
+          <form method="post" action="{% url 'techbrat:signin' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="signin-email">Email Address</label>
+              <input type="email" id="signin-email" name="email" placeholder="your@email.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="signin-password">Password</label>
+              <input type="password" id="signin-password" name="password" placeholder="Enter your password" required />
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="signin-remember" name="remember" />
+              <label class="form-check-label" for="signin-remember">
+                Remember me
+              </label>
+            </div>
+
+            <button type="submit" class="btn-auth">Sign In</button>
+          </form>
+
+          <div class="divider">
+            New to techBrat? <a href="#" onclick="switchTab('signup');"
+              style="color: #667eea; text-decoration: none; font-weight: 600;">Create account</a>
+          </div>
+        </div>
+
+        <!-- SIGN UP FORM -->
+        <div id="signup-tab" class="tab-content">
+          <form method="post" action="{% url 'techbrat:signup' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="signup-fullname">Full Name</label>
+              <input type="text" id="signup-fullname" name="fullname" placeholder="Enter your full name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="signup-email">Email Address</label>
+              <input type="email" id="signup-email" name="email" placeholder="your@email.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" name="password" placeholder="Create a password" required />
+              <div class="password-strength">
+                <div class="strength-meter">
+                  <div class="strength-meter-fill"></div>
+                </div>
+                <small class="strength-text">Strength: <span id="strength-text">Weak</span></small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm">Confirm Password</label>
+              <input type="password" id="signup-confirm" name="confirm_password" placeholder="Confirm your password"
+                required />
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="signup-terms" name="terms" required />
+              <label class="form-check-label" for="signup-terms">
+                I agree to the <a href="#" class="future-feature" style="color: #667eea; text-decoration: none;">Terms
+                  and Conditions</a>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-auth">Create Account</button>
+          </form>
+
+          <div class="divider">
+            Already have an account? <a href="#" onclick="switchTab('signin');"
+              style="color: #667eea; text-decoration: none; font-weight: 600;">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/common.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.getElementById('signin-tab').classList.remove('active');
+      document.getElementById('signup-tab').classList.remove('active');
+
+      // Remove active class from all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById(tabName + '-tab').classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Password strength indicator
+    const passwordInput = document.getElementById('signup-password');
+    const strengthMeterFill = document.querySelector('.strength-meter-fill');
+    const strengthText = document.getElementById('strength-text');
+
+    passwordInput.addEventListener('input', function () {
+      const password = this.value;
+      let strength = 0;
+
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+      strengthMeterFill.classList.remove('weak', 'medium', 'strong');
+
+      if (strength <= 1) {
+        strengthMeterFill.classList.add('weak');
+        strengthText.textContent = 'Weak';
+      } else if (strength === 2 || strength === 3) {
+        strengthMeterFill.classList.add('medium');
+        strengthText.textContent = 'Medium';
+      } else {
+        strengthMeterFill.classList.add('strong');
+        strengthText.textContent = 'Strong';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile - techBrat</title>
+  {% load static %}
+  {% load custom_filters %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="{% static 'images/bglogo.png' %}" alt="techBrat logo" width="40" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:index' %}">
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:que' %}">Career Paths</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#resources">Resources</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#learning-journey">Learning Journey</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:issue' %}">Issue Assistance</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link">Explore Roadmap</a>
+          </li>
+
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+            <div class="profile-dropdown">
+              <button class="profile-btn" onclick="toggleProfileMenu(event)">
+                <div class="profile-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                <span class="d-none d-md-inline">{{ user.first_name|default:user.username }}</span>
+              </button>
+
+              <div class="dropdown-menu-custom" id="profileMenu">
+                <div class="user-email">{{ user.email }}</div>
+
+                <a href="{% url 'techbrat:profile' %}" class="dropdown-item-custom active">
+                  <i class="fas fa-user-circle"></i>
+                  <span>View Profile</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-cog"></i>
+                  <span>Settings</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-heart"></i>
+                  <span>Saved Items</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-download"></i>
+                  <span>Downloads</span>
+                </a>
+
+                <div class="dropdown-divider-custom"></div>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-bell"></i>
+                  <span>Notifications</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+
+                <div class="dropdown-divider-custom"></div>
+
+                <a href="{% url 'techbrat:signout' %}" class="dropdown-item-custom danger">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+            {% else %}
+            <a href="{% url 'techbrat:signin' %}" class="btn btn-primary ms-3">Get Started</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Profile Container -->
+  <div class="container py-5">
+    <!-- Page Header -->
+    <div class="profile-header mb-5">
+      <h1 class="fw-bold mb-2">My Profile</h1>
+      <p class="text-secondary">Manage your professional information and career preferences</p>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container mb-4">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>{{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+      <!-- Main Content -->
+      <div class="col-lg-8">
+        <!-- 1. Profile Overview Section -->
+        <div class="profile-card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-user-circle text-primary me-2"></i>Profile Overview
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('profile-overview')">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="profile-overview-view" class="profile-section-view">
+            <div class="profile-info-grid">
+              <div class="info-item">
+                <label class="info-label">Full Name</label>
+                <p class="info-value">{{ user.first_name }} {{ user.last_name }}</p>
+              </div>
+              <div class="info-item">
+                <label class="info-label">Email</label>
+                <p class="info-value">{{ user.email }}</p>
+              </div>
+              <div class="info-item">
+                <label class="info-label">Location</label>
+                <p class="info-value">{{ profile.location|default:"Not specified" }}</p>
+              </div>
+              <div class="info-item">
+                <label class="info-label">Status</label>
+                <p class="info-value">
+                  <span class="badge bg-info">{{ profile.get_current_status_display }}</span>
+                </p>
+              </div>
+              <div class="info-item full-width">
+                <label class="info-label">Bio</label>
+                <p class="info-value">{{ profile.bio|default:"No bio added yet" }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <div id="profile-overview-edit" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update_profile">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" value="{{ user.get_full_name }}" disabled>
+                  <small class="text-muted">Cannot be changed here</small>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                  <small class="text-muted">Read-only field</small>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Location</label>
+                  <input type="text" name="location" class="form-control" value="{{ profile.location }}"
+                    placeholder="e.g., Mumbai, India">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Current Status</label>
+                  <select name="current_status" class="form-select">
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if profile.current_status == value %}selected{% endif %}>
+                      {{ label }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Bio</label>
+                  <textarea name="bio" class="form-control" rows="3"
+                    placeholder="Tell us about yourself...">{{ profile.bio }}</textarea>
+                  <small class="text-muted">Max 500 characters</small>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Changes
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('profile-overview')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 2. Education Section -->
+        <div class="profile-card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-graduation-cap text-primary me-2"></i>Education
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('education')">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="education-view" class="profile-section-view">
+            {% if profile.highest_qualification %}
+            <div class="education-item">
+              <h6 class="mb-2">{{ profile.highest_qualification }}</h6>
+              <p class="mb-1">
+                <i class="fas fa-school me-2"></i>
+                <strong>Institution:</strong> {{ profile.institution|default:"Not specified" }}
+              </p>
+              <p class="mb-1">
+                <i class="fas fa-book me-2"></i>
+                <strong>Field of Study:</strong> {{ profile.field_of_study|default:"Not specified" }}
+              </p>
+              <p class="mb-1">
+                <i class="fas fa-calendar me-2"></i>
+                <strong>Current Year:</strong> {{ profile.current_year|default:"Not specified" }}
+              </p>
+              {% if profile.cgpa %}
+              <p class="mb-0">
+                <i class="fas fa-star me-2"></i>
+                <strong>CGPA:</strong> {{ profile.cgpa }}
+              </p>
+              {% endif %}
+            </div>
+            {% else %}
+            <p class="text-muted">No education information added yet</p>
+            {% endif %}
+          </div>
+
+          <!-- Edit Mode -->
+          <div id="education-edit" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update_profile">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Highest Qualification</label>
+                  <input type="text" name="highest_qualification" class="form-control"
+                    value="{{ profile.highest_qualification }}" placeholder="e.g., Bachelor's Degree">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Institution / College</label>
+                  <input type="text" name="institution" class="form-control" value="{{ profile.institution }}"
+                    placeholder="e.g., IIT Delhi">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Field of Study</label>
+                  <input type="text" name="field_of_study" class="form-control" value="{{ profile.field_of_study }}"
+                    placeholder="e.g., Computer Science">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Current Year / Graduation Year</label>
+                  <input type="text" name="current_year" class="form-control" value="{{ profile.current_year }}"
+                    placeholder="e.g., 2024 / 3rd Year">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">CGPA (Optional)</label>
+                  <input type="number" name="cgpa" class="form-control" value="{{ profile.cgpa }}" step="0.01" min="0"
+                    max="10" placeholder="e.g., 8.5">
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Changes
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('education')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 3. Interests Section -->
+        <div class="profile-card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-heart text-primary me-2"></i>Interests
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('interests')">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="interests-view" class="profile-section-view">
+            <div class="interests-grid">
+              <div class="interest-item">
+                <label class="interest-label">Career Interests</label>
+                <p class="interest-value">
+                  {% if profile.career_interests %}
+                  {% for interest in profile.career_interests|split:"," %}
+                  <span class="badge bg-light text-dark me-2">{{ interest }}</span>
+                  {% endfor %}
+                  {% else %}
+                  <span class="text-muted">Not specified</span>
+                  {% endif %}
+                </p>
+              </div>
+
+              <div class="interest-item">
+                <label class="interest-label">Subject Interests</label>
+                <p class="interest-value">
+                  {% if profile.subject_interests %}
+                  {% for subject in profile.subject_interests|split:"," %}
+                  <span class="badge bg-light text-dark me-2">{{ subject }}</span>
+                  {% endfor %}
+                  {% else %}
+                  <span class="text-muted">Not specified</span>
+                  {% endif %}
+                </p>
+              </div>
+
+              <div class="interest-item">
+                <label class="interest-label">Preferred Work Type</label>
+                <p class="interest-value">
+                  {% if profile.preferred_work_type %}
+                  <span class="badge bg-info">{{ profile.get_preferred_work_type_display }}</span>
+                  {% else %}
+                  <span class="text-muted">Not specified</span>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <div id="interests-edit" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update_profile">
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Career Interests (comma-separated)</label>
+                  <textarea name="career_interests" class="form-control" rows="2"
+                    placeholder="e.g., Web Development, Machine Learning, Cloud Computing">{{ profile.career_interests }}</textarea>
+                  <small class="text-muted">Enter interests separated by commas</small>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Subject Interests (comma-separated)</label>
+                  <textarea name="subject_interests" class="form-control" rows="2"
+                    placeholder="e.g., Python, JavaScript, Data Science">{{ profile.subject_interests }}</textarea>
+                  <small class="text-muted">Enter subjects separated by commas</small>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Preferred Work Type</label>
+                  <select name="preferred_work_type" class="form-select">
+                    <option value="">Select Work Type</option>
+                    {% for value, label in work_type_choices %}
+                    <option value="{{ value }}" {% if profile.preferred_work_type == value %}selected{% endif %}>
+                      {{ label }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Changes
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('interests')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 4. Skills Section -->
+        <div class="profile-card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-code text-primary me-2"></i>Skills
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('skills-add')">
+              <i class="fas fa-plus me-1"></i>Add Skill
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="skills-view" class="profile-section-view">
+            {% if skills %}
+            <div class="skills-grid">
+              {% for skill in skills %}
+              <div class="skill-card">
+                <div class="skill-content">
+                  <h6 class="skill-name">{{ skill.skill_name }}</h6>
+                  <p class="skill-level">
+                    {% if skill.proficiency == 'beginner' %}
+                    <span class="proficiency-badge beginner">Beginner</span>
+                    {% elif skill.proficiency == 'intermediate' %}
+                    <span class="proficiency-badge intermediate">Intermediate</span>
+                    {% else %}
+                    <span class="proficiency-badge advanced">Advanced</span>
+                    {% endif %}
+                  </p>
+                </div>
+                <form method="POST" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="delete_skill">
+                  <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove this skill?')">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted">No skills added yet</p>
+            {% endif %}
+          </div>
+
+          <!-- Add Skill Mode -->
+          <div id="skills-add" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="add_skill">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Skill Name</label>
+                  <input type="text" name="skill_name" class="form-control" placeholder="e.g., Python, JavaScript"
+                    required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Proficiency Level</label>
+                  <select name="proficiency" class="form-select">
+                    {% for value, label in skill_level_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Add Skill
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('skills-add')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 5. Career Preferences Section -->
+        <div class="profile-card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-briefcase text-primary me-2"></i>Career Preferences
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('career-prefs')">
+              <i class="fas fa-edit me-1"></i>Edit
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="career-prefs-view" class="profile-section-view">
+            <div class="career-prefs-grid">
+              <div class="pref-item">
+                <label class="pref-label">Preferred Locations</label>
+                <p class="pref-value">
+                  {% if profile.preferred_locations %}
+                  {% for location in profile.preferred_locations|split:"," %}
+                  <span class="badge bg-light text-dark me-2">{{ location }}</span>
+                  {% endfor %}
+                  {% else %}
+                  <span class="text-muted">Not specified</span>
+                  {% endif %}
+                </p>
+              </div>
+
+              <div class="pref-item">
+                <label class="pref-label">Salary Expectation</label>
+                <p class="pref-value">{{ profile.salary_expectation|default:"Not specified" }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <div id="career-prefs-edit" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="update_profile">
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Preferred Locations (comma-separated)</label>
+                  <textarea name="preferred_locations" class="form-control" rows="2"
+                    placeholder="e.g., Bangalore, Mumbai, Remote">{{ profile.preferred_locations }}</textarea>
+                  <small class="text-muted">Enter locations separated by commas</small>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Salary Expectation (Optional)</label>
+                  <input type="text" name="salary_expectation" class="form-control"
+                    value="{{ profile.salary_expectation }}" placeholder="e.g., 5-8 LPA">
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Changes
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('career-prefs')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 6. Experience Section -->
+        <div class="profile-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-suitcase text-primary me-2"></i>Experience
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleEdit('experience-add')">
+              <i class="fas fa-plus me-1"></i>Add Experience
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div id="experience-view" class="profile-section-view">
+            {% if experiences %}
+            {% for exp in experiences %}
+            <div class="experience-card">
+              <div class="exp-header">
+                <h6 class="exp-title">{{ exp.title }}</h6>
+                <form method="POST" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="delete_experience">
+                  <input type="hidden" name="exp_id" value="{{ exp.id }}">
+                  <button type="submit" class="btn btn-sm btn-danger"
+                    onclick="return confirm('Remove this experience?')">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+
+              <p class="exp-org">
+                <i class="fas fa-building me-2"></i>
+                <strong>{{ exp.organization }}</strong>
+              </p>
+
+              <p class="exp-duration">
+                <i class="fas fa-calendar-alt me-2"></i>
+                {{ exp.start_date|date:"M Y" }}
+                -
+                {% if exp.is_ongoing %}
+                <span class="badge bg-success">Ongoing</span>
+                {% else %}
+                {{ exp.end_date|date:"M Y" }}
+                {% endif %}
+              </p>
+
+              {% if exp.description %}
+              <p class="exp-desc">{{ exp.description }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted">No experience added yet</p>
+            {% endif %}
+          </div>
+
+          <!-- Add Experience Mode -->
+          <div id="experience-add" class="profile-section-edit d-none">
+            <form method="POST" class="edit-form">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="add_experience">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Title</label>
+                  <input type="text" name="title" class="form-control"
+                    placeholder="e.g., Summer Intern, Project Manager" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Organization</label>
+                  <input type="text" name="organization" class="form-control" placeholder="e.g., Google, Microsoft">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Start Date</label>
+                  <input type="date" name="start_date" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">End Date</label>
+                  <input type="date" name="end_date" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="is_ongoing" id="isOngoing">
+                    <label class="form-check-label" for="isOngoing">
+                      Currently working here
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Description (Optional)</label>
+                  <textarea name="description" class="form-control" rows="3"
+                    placeholder="Describe your responsibilities and achievements..."></textarea>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Add Experience
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="toggleEdit('experience-add')">
+                    <i class="fas fa-times me-1"></i>Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <!-- Profile Completion Card -->
+        <div class="profile-card sticky-top">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-pie text-primary me-2"></i>Profile Completion
+            </h5>
+          </div>
+
+          <div class="profile-completion">
+            <div class="completion-details">
+              <div class="completion-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Profile Overview</span>
+              </div>
+              {% if profile.highest_qualification %}
+              <div class="completion-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Education</span>
+              </div>
+              {% endif %}
+              {% if profile.career_interests %}
+              <div class="completion-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Interests</span>
+              </div>
+              {% endif %}
+              {% if skills %}
+              <div class="completion-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Skills ({{ skills.count }})</span>
+              </div>
+              {% endif %}
+              {% if experiences %}
+              <div class="completion-item">
+                <i class="fas fa-check-circle text-success"></i>
+                <span>Experience ({{ experiences.count }})</span>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-dark text-white mt-5">
+    <div class="container text-center">
+      <p class="mb-0">© 2025 techBrat. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{% static 'js/common.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleProfileMenu(event) {
+      event.preventDefault();
+      const menu = document.getElementById('profileMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('profileMenu');
+      const profileBtn = document.querySelector('.profile-btn');
+      if (menu && !e.target.closest('.profile-dropdown')) {
+        menu.style.display = 'none';
+      }
+    });
+
+    function toggleEdit(sectionId) {
+      const viewEl = document.getElementById(sectionId + '-view');
+      const editEl = document.getElementById(sectionId + '-edit');
+
+      if (viewEl && editEl) {
+        viewEl.classList.toggle('d-none');
+        editEl.classList.toggle('d-none');
+      }
+    }
+  </script>
+</body>
+
+</html>

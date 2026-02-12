@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Issue Assistance - techBrat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="{% static 'images/bglogo.png' %}" alt="techBrat logo" width="40" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:index' %}">
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'techbrat:que' %}">Career Paths</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#resources">Resources</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#learning-journey">Learning Journey</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'techbrat:issue' %}">Issue Assistance</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link">Explore Roadmap</a>
+          </li>
+
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+            <div class="profile-dropdown">
+              <button class="profile-btn" onclick="toggleProfileMenu(event)">
+                <div class="profile-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                <span class="d-none d-md-inline">{{ user.first_name|default:user.username }}</span>
+              </button>
+
+              <div class="dropdown-menu-custom" id="profileMenu">
+                <div class="user-email">{{ user.email }}</div>
+
+                <a href="{% url 'techbrat:profile' %}" class="dropdown-item-custom">
+                  <i class="fas fa-user-circle"></i>
+                  <span>View Profile</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-cog"></i>
+                  <span>Settings</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-heart"></i>
+                  <span>Saved Items</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-download"></i>
+                  <span>Downloads</span>
+                </a>
+
+                <div class="dropdown-divider-custom"></div>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-bell"></i>
+                  <span>Notifications</span>
+                </a>
+
+                <a href="#" class="dropdown-item-custom future-feature">
+                  <i class="fas fa-question-circle"></i>
+                  <span>Help & Support</span>
+                </a>
+
+                <div class="dropdown-divider-custom"></div>
+
+                <a href="{% url 'techbrat:signout' %}" class="dropdown-item-custom danger">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+            {% else %}
+            <a href="{% url 'techbrat:signin' %}" class="btn btn-primary ms-3">Get Started</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Learning Issue Assistance</h2>
+        <p class="text-secondary">Describe the problem you're facing while learning, and get guidance.</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card p-4 shadow-sm">
+            <form id="issueForm">
+              {% csrf_token %}
+
+
+              <div class="mb-3">
+                <label for="issueDescription" class="form-label">Describe your issue</label>
+                <textarea class="form-control" id="issueDescription" rows="5"
+                  placeholder="Explain what you're stuck on..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-success">Get Assistance</button>
+            </form>
+
+            <div id="responseArea" class="mt-4" style="display:none;">
+              <h5 class="text-primary">Guidance:</h5>
+              <div id="responseContent" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-dark text-white">
+    <div class="container text-center">
+      <p class="mb-0">© 2025 techBrat. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/issue.js' %}"></script>
+  <script src="{% static 'js/common.js' %}"></script>
+
+  <script>
+    function toggleProfileMenu(event) {
+      event.preventDefault();
+      const menu = document.getElementById('profileMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('profileMenu');
+      const profileBtn = document.querySelector('.profile-btn');
+      if (menu && !e.target.closest('.profile-dropdown')) {
+        menu.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+
+</html>
