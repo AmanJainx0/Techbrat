@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Motivation & Tips - techBrat{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/course.css' %}">
+<link rel="stylesheet" href="{% static 'css/motivation.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="hero-boost shadow-sm">
+            <div class="hero-boost-content">
+                <span class="badge rounded-pill bg-light text-primary mb-3 px-3 py-2">
+                    Daily Momentum for Your Tech Journey
+                </span>
+                <h2>Stay consistent. Learn deeply. Keep shipping.</h2>
+                <p>
+                    Bite-sized motivation and practical learning tips to help you stay sharp,
+                    build better habits, and move forward every day.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <div class="streak-badge">
+                        <i class="fas fa-fire flame"></i>
+                        <span>{{ streak }} day{{ streak|pluralize }} streak</span>
+                    </div>
+                    {% if daily_tip %}
+                    <div class="streak-badge">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Today's focus: {{ daily_tip.category|title }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 align-items-stretch mb-5">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="tip-icon mb-0">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>
+                                <p class="text-uppercase text-muted small fw-semibold mb-1">Featured Tip</p>
+                                <h3 class="h4 fw-bold mb-0">
+                                    {% if daily_tip %}{{ daily_tip.title }}{% else %}Build one focused habit at a time{% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <p class="text-secondary mb-4">
+                            {% if daily_tip %}
+                            {{ daily_tip.explanation }}
+                            {% else %}
+                            Start with a small repeatable routine. A consistent 30-minute learning block
+                            beats an occasional 5-hour grind every time.
+                            {% endif %}
+                        </p>
+                        <div class="tip-action">
+                            {% if daily_tip %}
+                            {{ daily_tip.action_step }}
+                            {% else %}
+                            Pick one topic, one resource, and one action you can complete today.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <p class="text-uppercase text-muted small fw-semibold mb-2">Why this page matters</p>
+                        <h3 class="h4 fw-bold mb-3">Momentum beats motivation alone.</h3>
+                        <p class="text-secondary mb-4">
+                            Use this space to reset your focus, discover practical advice, and keep your
+                            learning energy pointed in the right direction.
+                        </p>
+                        <ul class="list-unstyled mb-0 d-grid gap-3">
+                            <li class="d-flex align-items-start gap-3">
+                                <i class="fas fa-check-circle text-primary mt-1"></i>
+                                <span>Filter tips by mindset, consistency, productivity, and career growth.</span>
+                            </li>
+                            <li class="d-flex align-items-start gap-3">
+                                <i class="fas fa-check-circle text-primary mt-1"></i>
+                                <span>Get practical next steps instead of generic quotes.</span>
+                            </li>
+                            <li class="d-flex align-items-start gap-3">
+                                <i class="fas fa-check-circle text-primary mt-1"></i>
+                                <span>Turn small wins into sustainable progress.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section shadow-sm">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                    <p class="text-uppercase text-muted small fw-semibold mb-1">Tip Explorer</p>
+                    <h3 class="h4 fw-bold mb-0">Find the right boost for today</h3>
+                </div>
+                <span id="tipCount" class="badge bg-primary-subtle text-primary px-3 py-2">Loading tips...</span>
+            </div>
+
+            <div class="filter-group">
+                <div class="form-group">
+                    <label for="categoryFilter">Category</label>
+                    <select id="categoryFilter" class="form-select">
+                        <option value="all">All categories</option>
+                        {% for category in categories %}
+                        <option value="{{ category }}">{{ category|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="limitFilter">Tips to show</label>
+                    <select id="limitFilter" class="form-select">
+                        <option value="3">3 tips</option>
+                        <option value="5" selected>5 tips</option>
+                        <option value="8">8 tips</option>
+                        <option value="10">10 tips</option>
+                    </select>
+                </div>
+                <button id="filterBtn" type="button" class="filter-btn">
+                    <i class="fas fa-sliders-h me-2"></i>Refresh Tips
+                </button>
+            </div>
+        </div>
+
+        <div id="tipsContainer" class="tips-container"></div>
+
+        <div class="quick-actions">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                    <p class="text-uppercase text-muted small fw-semibold mb-1">Keep Going</p>
+                    <h3 class="h4 fw-bold mb-0">Pair motivation with action</h3>
+                </div>
+                <p class="text-secondary mb-0">Jump into the next part of techBrat that moves you forward.</p>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-6 col-xl-3">
+                    <a href="{% url 'techbrat:courses' %}" class="action-btn text-decoration-none d-block h-100">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4>Courses</h4>
+                        <p>Turn momentum into structured learning with curated resources.</p>
+                    </a>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <a href="{% url 'techbrat:roadmap' %}?path=web" class="action-btn text-decoration-none d-block h-100">
+                        <i class="fas fa-map-signs"></i>
+                        <h4>Roadmaps</h4>
+                        <p>Map your next steps with a clearer direction and timeline.</p>
+                    </a>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <a href="{% url 'techbrat:books' %}" class="action-btn text-decoration-none d-block h-100">
+                        <i class="fas fa-book-open"></i>
+                        <h4>Books</h4>
+                        <p>Deepen your thinking with handpicked technical reads.</p>
+                    </a>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <a href="{% url 'techbrat:tools' %}" class="action-btn text-decoration-none d-block h-100">
+                        <i class="fas fa-toolbox"></i>
+                        <h4>Tools</h4>
+                        <p>Explore tools that make your workflow faster and sharper.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<template id="tipCardTemplate">
+    <article class="tip-card">
+        <div id="tipIcon" class="tip-icon"></div>
+        <div id="tipCategory" class="tip-category"></div>
+        <h3 id="tipTitle"></h3>
+        <p id="tipExplanation" class="tip-explanation"></p>
+        <div id="tipAction" class="tip-action"></div>
+    </article>
+</template>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/motivation.js' %}"></script>
+{% endblock %}

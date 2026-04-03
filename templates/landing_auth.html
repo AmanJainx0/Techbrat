@@ -1,0 +1,261 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>techBrat - Stop Guessing. Start Building Your Tech Career.</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="grid-overlay"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <section class="hero">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7">
+            <h1 class="fade-card delay-1">
+              Stop Guessing.
+              <span>Start Building Your Tech Career.</span>
+            </h1>
+            <p class="hero-copy fade-card delay-2">
+              Explore a sharper path into tech with AI-powered guidance, curated learning resources, and roadmaps built for real forward motion.
+            </p>
+            <div class="hero-actions fade-card delay-2">
+              <a href="#auth-entry" class="btn btn-main primary">Get Started</a>
+              <a href="#platform-flow" class="btn btn-main secondary">Explore Platform</a>
+            </div>
+            <p class="hero-proof fade-card delay-3">
+              Join thousands of learners turning interest into structure, direction, and consistent momentum.
+            </p>
+          </div>
+          <div class="col-lg-5">
+            <div class="glass-panel fade-card delay-2">
+              <div class="hero-stack">
+                <div class="insight-card">
+                  <p class="text-uppercase small text-info mb-2">Career signal</p>
+                  <h3 class="h5 fw-bold mb-2">From confusion to a clear next move</h3>
+                  <p class="muted-text">TechBrat turns interests, current skills, and goals into a guided plan instead of another random pile of tutorials.</p>
+                </div>
+                <div class="metric-grid">
+                  <div class="metric-box">
+                    <strong>3 steps</strong>
+                    <span>to generate a focused path</span>
+                  </div>
+                  <div class="metric-box">
+                    <strong>1 place</strong>
+                    <span>for roadmaps, books, and courses</span>
+                  </div>
+                </div>
+                <div class="insight-card">
+                  <p class="text-uppercase small text-info mb-2">Built for progress</p>
+                  <div class="pill-row">
+                    <span class="pill">AI Career Guidance</span>
+                    <span class="pill">Curated Courses</span>
+                    <span class="pill">Books That Matter</span>
+                    <span class="pill">Skill-first Roadmaps</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Why learners stick with techBrat</h2>
+          <p class="section-copy">Everything is designed to reduce noise and help you take the next useful step, not drown in options.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3">
+            <div class="value-card fade-card">
+              <div class="icon-box"><i class="fas fa-brain"></i></div>
+              <h3>AI Career Guidance</h3>
+              <p class="muted-text">Translate your interests into viable tech roles with guidance that feels specific instead of vague.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="value-card fade-card delay-1">
+              <div class="icon-box"><i class="fas fa-route"></i></div>
+              <h3>Personalized Learning Paths</h3>
+              <p class="muted-text">See what to learn next based on your level and goals, not on whatever tutorial is trending.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="value-card fade-card delay-2">
+              <div class="icon-box"><i class="fas fa-book-open"></i></div>
+              <h3>Curated Courses & Books</h3>
+              <p class="muted-text">Find supporting resources that align with your path instead of burning time on low-signal recommendations.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="value-card fade-card delay-3">
+              <div class="icon-box"><i class="fas fa-laptop-code"></i></div>
+              <h3>Real-world Skill Building</h3>
+              <p class="muted-text">Move toward projects, interviews, and execution with a clearer sense of what matters now.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platform-flow">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">How it works</h2>
+          <p class="section-copy">A straightforward system that gets you from uncertainty to action without making the product feel heavy.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="step-card fade-card">
+              <div class="step-num">1</div>
+              <h3>Tell us your goal</h3>
+              <p class="muted-text">Share your interests, level, and preferred direction so the platform understands your starting point.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="step-card fade-card delay-1">
+              <div class="step-num">2</div>
+              <h3>Get a personalized roadmap</h3>
+              <p class="muted-text">Receive tailored career guidance and a structure that reflects what you actually want to build.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="step-card fade-card delay-2">
+              <div class="step-num">3</div>
+              <h3>Start learning with the best resources</h3>
+              <p class="muted-text">Jump into curated courses, books, and support tools without losing time in noisy search loops.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-section" id="auth-entry">
+      <div class="container">
+        <div class="auth-shell auth-shell-single">
+          <div class="text-center mb-5">
+            <h2 class="section-title">Step into your workspace</h2>
+            <p class="auth-intro">Start your tech journey today with one clean path into your personalized workspace.</p>
+          </div>
+
+          <div class="auth-card auth-card-single fade-card">
+            <div class="auth-tabs" data-auth-mode="{{ auth_mode|default:'signup' }}">
+              <button class="auth-tab {% if auth_mode != 'signin' %}active{% endif %}" id="tab-new" type="button" data-auth-target="signup">
+                <strong>New to techBrat</strong>
+                <span>Create your account and start building with a plan.</span>
+              </button>
+              <button class="auth-tab {% if auth_mode == 'signin' %}active{% endif %}" id="tab-existing" type="button" data-auth-target="signin">
+                <strong>Existing user</strong>
+                <span>Pick up your roadmap and continue.</span>
+              </button>
+            </div>
+
+            {% if messages %}
+            <div class="message-box">
+              {% for message in messages %}
+              <div>{{ message }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="auth-panel auth-panel-single">
+              <div id="signup-panel" class="auth-form-panel {% if auth_mode == 'signin' %}d-none{% endif %}">
+              <div class="auth-kicker">New to techBrat</div>
+              <h3>Create your account</h3>
+              <p>Set up your account and we’ll move you straight into a guided welcome flow.</p>
+              <form method="POST" action="{% url 'techbrat:signup' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" name="fullname" placeholder="John Doe" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" placeholder="Create a strong password" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Confirm Password</label>
+                  <input type="password" class="form-control" name="confirm_password" placeholder="Repeat password" required>
+                </div>
+                <button type="submit" class="auth-submit">Create Account</button>
+              </form>
+              </div>
+
+              <div id="signin-panel" class="auth-form-panel {% if auth_mode != 'signin' %}d-none{% endif %}">
+              <div class="auth-kicker">Existing user</div>
+              <h3>Welcome back</h3>
+              <p>Sign in directly to continue your roadmap, resources, and progress.</p>
+              <form method="POST" action="{% url 'techbrat:signin' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="auth-submit">Sign In</button>
+              </form>
+              </div>
+
+              <div class="divider">or continue with</div>
+
+              <div class="social-grid">
+                {% if google_login_enabled %}
+                <a class="social-btn" href="{% provider_login_url 'google' process='login' %}">
+                  <i class="fab fa-google"></i>
+                  Continue with Google
+                </a>
+                {% else %}
+                <div class="social-btn soon">
+                  <i class="fab fa-google"></i>
+                  Google (configure provider)
+                </div>
+                {% endif %}
+
+                {% if github_login_enabled %}
+                <a class="social-btn" href="{% provider_login_url 'github' process='login' %}">
+                  <i class="fab fa-github"></i>
+                  Continue with GitHub
+                </a>
+                {% else %}
+                <div class="social-btn soon">
+                  <i class="fab fa-github"></i>
+                  GitHub (configure provider)
+                </div>
+                {% endif %}
+
+                <div class="social-btn soon">
+                  <i class="fas fa-code"></i>
+                  LeetCode (Coming Soon)
+                </div>
+              </div>
+
+              <p class="trust-note">Join thousands of learners using techBrat to turn direction into real progress.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/landing_auth.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Books - techBrat{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/course.css' %}">
+<link rel="stylesheet" href="{% static 'css/books.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Curated Books for Your Growth</h2>
+        <p class="text-muted">Discover books tailored to your learning journey</p>
+    </div>
+</section>
+
+<!-- Filter section -->
+<section class="container mb-5">
+    <div class="card shadow-sm p-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label mb-1">Level</label>
+          <select class="form-select" id="levelFilter">
+            <option value="">Any</option>
+            {% for value,label in level_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label mb-1">Domain</label>
+          <input type="text" class="form-control" id="domainFilter" placeholder="AI, Web, Systems" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label mb-1">Type</label>
+          <select class="form-select" id="typeFilter">
+            <option value="">Any</option>
+            {% for value,label in type_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-1 d-grid">
+          <button class="btn btn-primary" id="filterBtn"><i class="fas fa-filter me-1"></i>Go</button>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- Main filtered books -->
+<section class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fw-bold mb-0">Filtered Books</h3>
+      <small class="text-muted">AI recommendations are below</small>
+    </div>
+    <div class="row g-4" id="filteredBooks"></div>
+</section>
+
+<!-- AI recommendations -->
+<section class="container py-5 bg-light rounded-3">
+    <h4 class="fw-bold mb-4 text-primary">
+        <i class="fas fa-magic text-primary me-2"></i>
+        Recommended For You
+    </h4>
+    <div class="row g-4" id="aiBooks"></div>
+</section>
+
+<!-- Errors -->
+<section class="container mt-4">
+    <div class="alert alert-warning d-none" id="bookError"></div>
+</section>
+
+<div
+    id="booksPageData"
+    data-user-level="{{ user_level }}"
+    data-user-domains='{{ domains_list|default:"[]"|safe }}'
+    data-user-goal="{{ goal }}"
+    hidden>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/books.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{
+  "roadmap_title": "Backend Development Roadmap",
+  "steps": [
+    {
+      "title": "Setup",
+      "description": "Initial setup and configuration",
+      "resources": [
+        {"title": "Django Documentation", "link": "https://docs.djangoproject.com/"}
+      ]
+    }
+  ]
+}

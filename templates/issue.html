@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Issue Assistance - techBrat{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-primary">Learning Issue Assistance</h2>
+      <p class="text-secondary">Describe the problem you're facing while learning, and get guidance.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card p-4 shadow-sm">
+          <form id="issueForm">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="issueDescription" class="form-label">Describe your issue</label>
+              <textarea class="form-control" id="issueDescription" rows="5"
+                placeholder="Explain what you're stuck on..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">Get Assistance</button>
+          </form>
+
+          <div id="responseArea" class="mt-4 d-none">
+            <h5 class="text-primary">Guidance:</h5>
+            <div id="responseContent" class="mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/issue.js' %}"></script>
+{% endblock %}

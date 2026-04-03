@@ -1,0 +1,106 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}TechBrat Roadmap{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/roadmap.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- âœ… Input Box for Custom Roadmap -->
+<section class="container text-center mt-5">
+  <h1 class="fw-bold">Generate Your Learning Roadmap</h1>
+  <p class="text-warning">Enter a topic and generate roadmap (Ex: MERN Roadmap)</p>
+
+  <div class="input-group mb-3 w-75 mx-auto">
+    <input type="text" id="roadmapInput" class="form-control" placeholder="Ex: MERN Roadmap" />
+    <button class="btn btn-primary" id="generateRoadmapBtn" type="button">
+      Generate
+    </button>
+  </div>
+</section>
+
+<!-- âœ… Generated Roadmap Display -->
+<section class="container mt-5">
+  <div id="roadmap-container" class="px-4 py-3"></div>
+</section>
+
+<!-- âœ… Roadmap Cards -->
+<section class="container mt-5">
+  <div class="row g-4">
+
+    <!-- âœ… Cloud Computing -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/cloud.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold roadmap-card-title">Cloud Computing</h5>
+        <p>Build apps on AWS / Azure, scaling efficiently.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="Cloud Computing Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+    <!-- âœ… MERN Stack -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/react-native.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold roadmap-card-title">MERN Stack</h5>
+        <p>Frontend + Backend using MongoDB, Express, React, Node.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="MERN Stack Developer Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+    <!-- âœ… AI / Machine Learning -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/artificial-intelligence.png" class="mx-auto mb-3"
+          width="100" />
+        <h5 class="fw-bold roadmap-card-title">AI & Machine Learning</h5>
+        <p>Learn ML, Deep Learning, Python, TensorFlow, PyTorch.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="AI and Machine Learning Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+    <!-- âœ… Cyber Security -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/fluency/96/lock.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold roadmap-card-title">Cyber Security</h5>
+        <p>Become an ethical hacker / penetration tester.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="Cyber Security Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+    <!-- âœ… Data Science -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/combo-chart.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold roadmap-card-title">Data Science</h5>
+        <p>Data analytics, statistics, PowerBI, ML workflows.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="Data Science Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+    <!-- âœ… Android Development -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 text-center p-4 shadow-sm">
+        <img src="https://img.icons8.com/color/96/000000/android-os.png" class="mx-auto mb-3" width="100" />
+        <h5 class="fw-bold roadmap-card-title">Android Development</h5>
+        <p>Build Android apps using Kotlin or Flutter.</p>
+        <button class="btn btn-success mt-2 roadmap-trigger" type="button"
+          data-roadmap-topic="Android Development Roadmap">Explore Roadmap</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/roadmap_page.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% load static %}
+<!-- Navbar -->
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'techbrat:index' %}"><img src="{% static 'images/bglogo.png' %}"
+                alt="techBrat logo" width="40" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' or request.path == '/index/' %}active{% endif %}"
+                        href="{% url 'techbrat:index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/que/' %}active{% endif %}" href="{% url 'techbrat:que' %}">Career Paths</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'techbrat:index' %}#resources">Curated Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'techbrat:index' %}#learning-journey">Learning Journey</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'techbrat:index' %}#contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link {% if request.path == '/roadmap/' %}active{% endif %}">Explore Roadmap</a>
+                </li>
+
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                    <div class="profile-dropdown">
+                        <button class="profile-btn" type="button" data-profile-toggle>
+                            <div class="profile-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="d-none d-md-inline">{{ user.first_name|default:user.username }}</span>
+                        </button>
+
+                        <div class="dropdown-menu-custom" id="profileMenu">
+                            <div class="user-email">{{ user.email }}</div>
+
+                            <a href="{% url 'techbrat:profile' %}" class="dropdown-item-custom {% if request.path == '/profile/' %}active{% endif %}">
+                                <i class="fas fa-user-circle"></i>
+                                <span>View Profile</span>
+                            </a>
+
+                            <!-- <a href="#" class="dropdown-item-custom future-feature">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+
+                            <a href="#" class="dropdown-item-custom future-feature">
+                                <i class="fas fa-heart"></i>
+                                <span>Saved Items</span>
+                            </a>
+
+                            <a href="#" class="dropdown-item-custom future-feature">
+                                <i class="fas fa-download"></i>
+                                <span>Downloads</span>
+                            </a>
+
+                            <div class="dropdown-divider-custom"></div>
+
+                            <a href="#" class="dropdown-item-custom future-feature">
+                                <i class="fas fa-bell"></i>
+                                <span>Notifications</span>
+                            </a>
+
+                            <a href="#" class="dropdown-item-custom future-feature">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                            </a> -->
+
+                            <div class="dropdown-divider-custom"></div>
+
+                            <a href="{% url 'techbrat:signout' %}" class="dropdown-item-custom danger">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'techbrat:signin' %}" class="btn btn-primary ms-3">Get Started</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

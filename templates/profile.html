@@ -1,0 +1,242 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile | techBrat{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="profile-hero text-white py-5 mb-4">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8 d-flex align-items-center gap-4">
+        <div class="avatar-lg shadow-sm">{{ user.first_name|default:user.username|first|upper }}</div>
+        <div>
+          <p class="text-uppercase small mb-1 opacity-75">Welcome back</p>
+          <h1 class="fw-bold mb-1">{{ user.first_name|default:user.username }}</h1>
+          <div class="d-flex flex-wrap align-items-center text-white-50 gap-3">
+            <span><i class="fa-solid fa-envelope me-2"></i>{{ user.email }}</span>
+            <span><i class="fa-solid fa-user-graduate me-2"></i>{{ profile.get_education_level_display }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="completion-card p-3 bg-white text-dark rounded-4 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-semibold">Profile completion</span>
+            <span class="fw-bold text-primary">{{ completion_percentage }}%</span>
+          </div>
+          <div class="progress" role="progressbar" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar profile-completion-bar" data-completion="{{ completion_percentage }}"></div>
+          </div>
+          <p class="small text-muted mt-2 mb-0">Complete your profile to unlock sharper guidance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="info-card shadow-sm">
+        <div class="icon-badge bg-primary-subtle text-primary"><i class="fa-solid fa-graduation-cap"></i></div>
+        <p class="label">Education Level</p>
+        <p class="value">{{ profile.get_education_level_display }}</p>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="info-card shadow-sm">
+        <div class="icon-badge bg-info-subtle text-info"><i class="fa-solid fa-laptop-code"></i></div>
+        <p class="label">Domains</p>
+        <p class="value">{% if domains_list %}{{ domains_list|length }} tracked{% else %}Add your interests{% endif %}</p>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="info-card shadow-sm">
+        <div class="icon-badge bg-warning-subtle text-warning"><i class="fa-solid fa-bullseye"></i></div>
+        <p class="label">Career Goal</p>
+        <p class="value">{{ profile.get_career_objective_display }}</p>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="info-card shadow-sm">
+        <div class="icon-badge bg-success-subtle text-success"><i class="fa-solid fa-brain"></i></div>
+        <p class="label">Skills</p>
+        <p class="value">{{ skills|length }} total</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card dashboard-card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div>
+            <p class="text-uppercase text-muted small mb-1">Profile Details</p>
+            <h5 class="mb-0">Academic Info & Preferences</h5>
+          </div>
+          <a class="btn btn-outline-primary btn-sm" href="#profile-form">Edit Profile</a>
+        </div>
+        <div class="card-body">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <p class="text-muted small mb-1">Current Course</p>
+              <p class="fw-semibold mb-0">{{ profile.current_course|default:"Not specified" }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted small mb-1">Year</p>
+              <p class="fw-semibold mb-0">{{ profile.year_of_study|default:"Not specified" }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted small mb-1">Work Mode</p>
+              <p class="fw-semibold mb-0">{{ profile.get_preferred_work_mode_display }}</p>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <p class="text-muted small mb-2">Domains</p>
+            {% if domains_list %}
+              <div class="d-flex flex-wrap gap-2">
+                {% for domain in domains_list %}
+                  <span class="badge rounded-pill bg-light text-dark border">{{ domain }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="text-muted mb-0">Add domains to personalize recommendations.</p>
+            {% endif %}
+          </div>
+
+          <div class="mb-4">
+            <p class="text-muted small mb-1">Target Timeline</p>
+            <p class="fw-semibold mb-0">{{ profile.target_timeline|default:"Set a timeline to stay accountable" }}</p>
+          </div>
+
+          <hr class="my-4">
+
+          <form id="profile-form" method="post" class="row g-3">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="update_profile">
+
+            <div class="col-md-6">
+              <label class="form-label">Education Level</label>
+              <select name="education_level" class="form-select">
+                {% for value,label in education_level_choices %}
+                  <option value="{{ value }}" {% if profile.education_level == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Current Course</label>
+              <input type="text" name="current_course" class="form-control" value="{{ profile.current_course }}" placeholder="e.g., B.Tech CSE">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Year of Study</label>
+              <input type="text" name="year_of_study" class="form-control" value="{{ profile.year_of_study }}" placeholder="e.g., 3rd year">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Preferred Work Mode</label>
+              <select name="preferred_work_mode" class="form-select">
+                {% for value,label in work_mode_choices %}
+                  <option value="{{ value }}" {% if profile.preferred_work_mode == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Tech Domains (comma separated)</label>
+              <textarea name="tech_domains" rows="2" class="form-control" placeholder="AI/ML, Web Development, Cybersecurity">{{ profile.tech_domains }}</textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Preferred Domain Work Type</label>
+              <select name="preferred_domain_work_type" class="form-select">
+                {% for value,label in domain_work_type_choices %}
+                  <option value="{{ value }}" {% if profile.preferred_domain_work_type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Career Objective</label>
+              <select name="career_objective" class="form-select">
+                {% for value,label in career_objective_choices %}
+                  <option value="{{ value }}" {% if profile.career_objective == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Target Timeline</label>
+              <input type="text" name="target_timeline" class="form-control" value="{{ profile.target_timeline }}" placeholder="e.g., 6 months">
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2">
+              <a href="#top" class="btn btn-light">Cancel</a>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card dashboard-card mb-4 sticky-top profile-sidebar-sticky">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div>
+            <p class="text-uppercase text-muted small mb-1">Skills</p>
+            <h5 class="mb-0">Your stack</h5>
+          </div>
+          <span class="badge bg-primary-subtle text-primary">{{ skills|length }}</span>
+        </div>
+        <div class="card-body">
+          {% if skills %}
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              {% for skill in skills %}
+                <span class="badge bg-dark-subtle text-dark border">{{ skill.skill_name }} · {{ skill.get_proficiency_display }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">No skills added yet.</p>
+          {% endif %}
+
+          <form method="post" class="vstack gap-2">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_skill">
+            <label class="form-label mb-1">Add a skill</label>
+            <input type="text" name="skill_name" class="form-control" placeholder="e.g., Django" required>
+            <select name="proficiency" class="form-select">
+              {% for value,label in skill_level_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-success w-100" type="submit">Add Skill</button>
+          </form>
+
+          {% if skills %}
+            <hr>
+            <p class="text-muted small mb-2">Remove a skill</p>
+            {% for skill in skills %}
+              <form method="post" class="d-flex align-items-center justify-content-between mb-2">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete_skill">
+                <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                <span class="fw-semibold">{{ skill.skill_name }}</span>
+                <button class="btn btn-outline-danger btn-sm" type="submit">Remove</button>
+              </form>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

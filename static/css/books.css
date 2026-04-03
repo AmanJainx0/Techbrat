@@ -1,0 +1,20 @@
+.book-card {
+  border-radius: 12px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+}
+
+.book-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.book-card .card-footer {
+  background: #fff;
+  border-top: 0;
+}

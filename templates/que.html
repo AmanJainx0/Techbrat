@@ -1,0 +1,66 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tech Career Questionnaire{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4 text-primary">Tech Career Questionnaire</h2>
+  <p class="text-center mb-5 text-secondary">
+    Answer a few questions and get beginner-friendly career recommendations!
+  </p>
+
+  <form id="studentForm">
+    {% csrf_token %}
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label for="education_level" class="form-label">Education Level</label>
+        <select class="form-select" id="education_level" name="education_level" required>
+          <option value="" selected disabled>Select Level</option>
+          <option>High School</option>
+          <option>Undergraduate</option>
+          <option>Postgraduate</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="interests" class="form-label">Interests / Hobbies</label>
+        <input type="text" class="form-control" id="interests" name="interests" placeholder="E.g. games, AI, design"
+          required />
+      </div>
+      <div class="col-md-6">
+        <label for="skills" class="form-label">Skills</label>
+        <input type="text" class="form-control" id="skills" name="skills" placeholder="E.g. problem-solving, math"
+          required />
+      </div>
+      <div class="col-md-6">
+        <label for="learning_style" class="form-label">Preferred Learning Style</label>
+        <select class="form-select" id="learning_style" name="learning_style" required>
+          <option value="" selected disabled>Select Style</option>
+          <option>Visual / Video</option>
+          <option>Hands-on / Interactive</option>
+          <option>Reading / Books</option>
+          <option>Mixed / Any</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="career_goal" class="form-label">Career Goal (if any)</label>
+        <input type="text" class="form-control" id="career_goal" name="career_goal"
+          placeholder="E.g. become a developer" />
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-success btn-lg">
+        Get Recommendations
+      </button>
+    </div>
+  </form>
+
+  <div id="results" class="mt-5"></div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/que.js' %}"></script>
+{% endblock %}

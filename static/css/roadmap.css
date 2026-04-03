@@ -1,0 +1,35 @@
+body {
+  background: #0f172a;
+  color: #fff;
+}
+
+.roadmap-card-title {
+  color: #2563eb;
+}
+
+.roadmap-loading {
+  color: #facc15;
+  font-size: 18px;
+}
+
+.roadmap-error {
+  color: #ef4444;
+}
+
+.roadmap-title {
+  color: #00eaff;
+  margin-bottom: 1rem;
+}
+
+#roadmap-container .roadmap-step {
+  padding: 18px;
+  margin: 14px 0;
+  background: #1e293b;
+  border-left: 4px solid #00eaff;
+  border-radius: 10px;
+  transition: transform 0.25s ease;
+}
+
+#roadmap-container .roadmap-step:hover {
+  transform: translateX(6px);
+}

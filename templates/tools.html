@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tools & Platforms - techBrat{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/course.css' %}">
+<link rel="stylesheet" href="{% static 'css/tools.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold display-5">Tools & Platforms</h2>
+        <p class="text-muted fs-5">Discover essential development tools, platforms, and services curated for your success</p>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="container mb-5">
+    <div class="filter-card shadow-sm">
+      <form id="toolsFilterForm" class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label mb-2">Search Tools</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="e.g., Git, Docker, React" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label mb-2">Category</label>
+          <select class="form-select" id="categoryFilter">
+            <option value="all">All Categories</option>
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category|title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label mb-2">Difficulty</label>
+          <select class="form-select" id="difficultyFilter">
+            <option value="all">All Levels</option>
+            {% for difficulty in difficulties %}
+            <option value="{{ difficulty }}">{{ difficulty|title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label mb-2">Use Case</label>
+          <select class="form-select" id="useCaseFilter">
+            <option value="all">All Use Cases</option>
+            {% for use_case in use_cases %}
+            <option value="{{ use_case }}">{{ use_case|title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button type="button" class="btn btn-primary" id="filterBtn">
+            <i class="fas fa-filter me-2"></i>Search
+          </button>
+        </div>
+      </form>
+    </div>
+</section>
+
+<!-- Main Tools Section -->
+<section class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fw-bold mb-0">Discover Tools</h3>
+      <small class="text-muted" id="toolCount">Loading...</small>
+    </div>
+    <div class="row g-4" id="filteredTools">
+      <div class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- AI Recommendations Section -->
+<section class="container mb-5">
+    <div class="ai-section">
+      <div class="ai-header">
+        <i class="fas fa-wand-magic-sparkles"></i>
+        <h4 class="fw-bold mb-0">AI-Recommended Tools</h4>
+      </div>
+      <div class="row g-4" id="aiTools">
+        <div class="loading-spinner">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- Error Message -->
+<section class="container">
+    <div class="alert alert-danger d-none" id="toolError" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <span id="errorMessage"></span>
+    </div>
+</section>
+
+<!-- Tool Card Template -->
+<template id="toolCardTemplate">
+  <div class="col-md-6 col-lg-4">
+    <div class="card tool-card h-100 shadow-sm">
+      <div class="card-body">
+        <div>
+          <span class="tool-category-badge" id="toolCategory"></span>
+        </div>
+        <h5 class="card-title fw-bold" id="toolName"></h5>
+        <p class="card-text text-muted" id="toolDesc"></p>
+        <div class="d-flex gap-2 flex-wrap mt-auto mb-3">
+          <span class="tool-badge" id="toolDifficulty"></span>
+          <span class="tool-badge" id="toolUseCase"></span>
+        </div>
+        <div class="pt-3 border-top">
+          <a href="#" class="tool-link" id="toolLink" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-external-link-alt me-1"></i>Visit Tool
+          </a>
+          <small class="text-muted" id="aiGeneratedBadge" class="d-block mt-2"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/tools.js' %}"></script>
+{% endblock %}
+

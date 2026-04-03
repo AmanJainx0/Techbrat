@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}techBrat{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0" data-aos="fade-right">
+        <h1 class="display-4 fw-bold">Be the Brat Who Masters Tech</h1>
+        <p class="lead text-secondary mt-3">
+          Explore the right tech career path with step-by-step guidance,
+          curated resources, and mentorship.
+        </p>
+        <a href="{% url 'techbrat:que' %}" class="btn btn-primary btn-lg mt-3">
+          Explore Paths
+        </a>
+
+      </div>
+      <div class="col-lg-6 text-center" data-aos="fade-left">
+        <img src="{% static 'images/learn.jpg' %}" alt="Tech Career Illustration" class="img-fluid rounded" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Career Paths Section -->
+<section id="career-paths" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" style="color: #2563eb">
+        Explore Tech Career Paths
+      </h2>
+      <p class="text-secondary">
+        Choose the right path for you and start your journey in tech.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Web Development -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/web.png" class="mx-auto mb-3" alt="Web Development"
+            width="100" />
+          <h5 class="fw-bold" style="color: #2563eb">Web Development</h5>
+          <p>Create websites and web apps that people use every day.</p>
+          <a href="{% url 'techbrat:roadmap' %}?path=web" class="btn btn-success mt-2">
+            Explore Roadmap
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Data Science & AI -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/artificial-intelligence.png" class="mx-auto mb-3"
+            alt="Data Science & AI" width="100" />
+          <h5 class="fw-bold" style="color: #2563eb">Data Science & AI</h5>
+          <p>
+            Analyze data and build intelligent systems to solve real-world
+            problems.
+          </p>
+          <a href="{% url 'techbrat:roadmap' %}?path=data-science" class="btn btn-success mt-2">
+            Explore Roadmap
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Cybersecurity -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/lock--v1.png" class="mx-auto mb-3" alt="Cybersecurity"
+            width="100" />
+          <h5 class="fw-bold" style="color: #2563eb">Cybersecurity</h5>
+          <p>
+            Protect systems and data from attacks and security breaches.
+          </p>
+          <a href="{% url 'techbrat:roadmap' %}?path=cybersecurity" class="btn btn-success mt-2">Explore Roadmap</a>
+        </div>
+      </div>
+
+      <!-- Cloud Computing -->
+      <!-- <div class="col-md-6 col-lg-4">
+          <div class="card h-100 text-center p-4 shadow-sm">
+            <img src="https://img.icons8.com/color/96/000000/cloud.png" class="mx-auto mb-3" alt="Cloud Computing"
+              width="100" />
+            <h5 class="fw-bold" style="color: #2563eb">Cloud Computing</h5>
+            <p>
+              Build and manage scalable apps on cloud platforms like AWS and
+              Azure.
+            </p>
+            <a href="{% url 'techbrat:roadmap' %}?path=cloud" class="btn btn-success mt-2">Explore Roadmap</a>
+          </div>
+        </div> -->
+    </div>
+  </div>
+</section>
+
+<!-- Resources Section -->
+<section id="resources" class="py-5" data-aos="fade-up">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-primary">Curated Resources</h2>
+      <p class="text-secondary">
+        Get the best free and paid learning materials to kickstart your tech
+        journey.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/open-book.png" class="mx-auto mb-3" alt="Courses"
+            width="80" />
+          <h5 class="fw-bold text-primary">Courses</h5>
+          <p>
+            Interactive courses from FreeCodeCamp, Coursera, Udemy, and
+            more.
+          </p>
+          <a href="{% url 'techbrat:courses' %}" class="btn btn-success mt-2">Explore Courses</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/book.png" class="mx-auto mb-3" alt="Books" width="80" />
+          <h5 class="fw-bold text-primary">Books</h5>
+          <p>
+            Recommended books to build strong fundamentals in every tech
+            domain.
+          </p>
+          <a href="{% url 'techbrat:books' %}" class="btn btn-success mt-2">Explore Books</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/toolbox.png" class="mx-auto mb-3" alt="Tools" width="80" />
+          <h5 class="fw-bold text-primary">Tools & Platforms</h5>
+          <p>
+            Essential tools, IDEs, and practice platforms like GitHub,
+            LeetCode, and Figma.
+          </p>
+          <a href="{% url 'techbrat:tools' %}" class="btn btn-success mt-2">Explore Tools</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Learning Journey Section -->
+<section id="learning-journey" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" style="color: #2563eb">Your Learning Journey</h2>
+      <p class="text-secondary">
+        Track your progress, tackle challenges, and get guidance at every
+        step.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://static.thenounproject.com/png/progress-tracker-icon-6135757-512.png" class="mx-auto mb-3"
+            alt="Progress" width="80" />
+          <h5 class="fw-bold" style="color: #2563eb">Progress Tracker</h5>
+          <p>
+            Visualize your roadmap completion and see how far you’ve come.
+          </p>
+          <a href="#" class="btn btn-success mt-2 future-feature">View Progress</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png" class="mx-auto mb-3" alt="Motivation"
+            width="80" />
+          <h5 class="fw-bold" style="color: #2563eb">Motivation & Tips</h5>
+          <p>
+            Receive encouraging tips, reminders, and productivity
+            suggestions to stay consistent.
+          </p>
+          <a href="{% url 'techbrat:motivation' %}" class="btn btn-success mt-2">Stay Motivated</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/000000/helping-hand.png" class="mx-auto mb-3" alt="Assistance"
+            width="80" />
+          <h5 class="fw-bold" style="color: #2563eb">Issue Assistance</h5>
+          <p>
+            Report learning difficulties or confusion and get
+            beginner-friendly explanations.
+          </p>
+          <a href="{% url 'techbrat:issue' %}" class="btn btn-success mt-2">
+            Get Help
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5" data-aos="fade-up">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-primary">Get in Touch</h2>
+      <p class="text-secondary">
+        Have questions or feedback? We’d love to hear from you.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <form>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Your Name" required />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Your Email" required />
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-success">
+            Send Message
+          </button>
+        </form>
+      </div>
+      <div class="col-lg-6">
+        <div class="p-4 shadow-sm h-100" style="border-radius: 12px; background-color: #f8f9fa">
+          <h5 class="fw-bold mb-3 text-primary">Connect with us</h5>
+          <p>
+            Email:
+            <a href="mailto:contact@techbrat.com">contact@techbrat.com</a>
+          </p>
+          <p>Phone: +91 98765 43210</p>
+          <div class="mt-3">
+            <a href="#" class="me-3 future-feature"><img src="https://img.icons8.com/color/48/000000/facebook-new.png"
+                width="32" alt="Facebook" /></a>
+            <a href="#" class="me-3 future-feature"><img src="https://img.icons8.com/color/48/000000/twitter.png"
+                width="32" alt="Twitter" /></a>
+            <a href="#" class="me-3 future-feature"><img src="https://img.icons8.com/color/48/000000/instagram-new.png"
+                width="32" alt="Instagram" /></a>
+            <a href="#" class="future-feature"><img src="https://img.icons8.com/color/48/000000/github.png" width="32"
+                alt="GitHub" /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</section>
+{% endblock %}
