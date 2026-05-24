@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".future-feature").forEach(feature => {
     feature.addEventListener("click", e => {
       e.preventDefault();
-      alert("This feature is coming in the future! Stay tuned 🚀");
+      alert("This feature is coming in the future! Stay tuned.");
     });
   });
 });
@@ -38,7 +38,7 @@ window.formatToList = function (text) {
   return `
     <ul>
       ${lines.map(line =>
-        `<li>${cleanAIResponse(line.replace(/^[•\-*]\s*/, ""))}</li>`
+        `<li>${cleanAIResponse(line.replace(/^[\u2022\-*]\s*/, ""))}</li>`
       ).join("")}
     </ul>
   `;

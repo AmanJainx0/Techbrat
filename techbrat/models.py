@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
+from django.utils import timezone
 
 # Create your models here.
 
@@ -117,6 +121,13 @@ class Course(models.Model):
     
     def __str__(self):
         return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:course_detail', args=[self.pk])
     
     class Meta:
         ordering = ['-created_at']
@@ -164,6 +175,13 @@ class Book(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.author}"
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:book_detail', args=[self.pk])
 
 
 class Tool(models.Model):
@@ -220,6 +238,13 @@ class Tool(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def display_name(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('techbrat:tool_detail', args=[self.pk])
+
 
 class Tip(models.Model):
     """Daily motivation and actionable tips for tech learners"""
@@ -253,4 +278,207 @@ class Tip(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:tip_detail', args=[self.pk])
+
+
+class SavedItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_items')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'content_type', 'object_id')
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', 'content_type', 'object_id']),
+            models.Index(fields=['created_at']),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} saved {self.content_type.app_label}.{self.content_type.model}:{self.object_id}'
+
+    @property
+    def item_title(self):
+        obj = self.content_object
+        if obj is None:
+            return 'Unavailable item'
+        return getattr(obj, 'title', None) or getattr(obj, 'name', None) or str(obj)
+
+
+class CareerPathSnapshot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='career_path_snapshots')
+    title = models.CharField(max_length=255)
+    summary = models.TextField(blank=True)
+    payload = models.JSONField(default=dict)
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'fingerprint')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:career_path_detail', args=[self.pk])
+
+
+class RoadmapSnapshot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='roadmap_snapshots')
+    title = models.CharField(max_length=255)
+    prompt = models.CharField(max_length=255)
+    summary = models.TextField(blank=True)
+    payload = models.JSONField(default=dict)
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'fingerprint')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:roadmap_snapshot_detail', args=[self.pk])
+
+    @property
+    def step_count(self):
+        roadmap = self.payload.get('roadmap', {})
+        steps = roadmap.get('steps', [])
+        return len(steps) if isinstance(steps, list) else 0
+
+    @property
+    def completed_steps_count(self):
+        return self.step_progress.count()
+
+    @property
+    def completion_percentage(self):
+        if not self.step_count:
+            return 0
+        return round((self.completed_steps_count / self.step_count) * 100)
+
+
+class RoadmapStepProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='roadmap_step_progress')
+    snapshot = models.ForeignKey(RoadmapSnapshot, on_delete=models.CASCADE, related_name='step_progress')
+    step_index = models.PositiveIntegerField()
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['step_index']
+        unique_together = ('user', 'snapshot', 'step_index')
+        indexes = [
+            models.Index(fields=['user', 'snapshot']),
+            models.Index(fields=['completed_at']),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} completed step {self.step_index} for {self.snapshot.title}'
+
+
+class LearningActivity(models.Model):
+    ACTIVITY_TYPE_CHOICES = [
+        ('roadmap_step_completed', 'Roadmap Step Completed'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='learning_activities')
+    activity_type = models.CharField(max_length=50, choices=ACTIVITY_TYPE_CHOICES)
+    activity_date = models.DateField(default=timezone.localdate)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-activity_date', '-created_at']
+        indexes = [
+            models.Index(fields=['user', 'activity_date']),
+            models.Index(fields=['activity_type']),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} {self.activity_type} on {self.activity_date}'
+
+
+class WeeklyGoal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weekly_goals')
+    week_start = models.DateField()
+    target_steps = models.PositiveIntegerField(default=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-week_start']
+        unique_together = ('user', 'week_start')
+        indexes = [
+            models.Index(fields=['user', 'week_start']),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} weekly goal for {self.week_start}'
+
+
+class IssueAssistanceSnapshot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='issue_assistance_snapshots')
+    title = models.CharField(max_length=255)
+    issue = models.TextField()
+    summary = models.TextField(blank=True)
+    payload = models.JSONField(default=dict)
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'fingerprint')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:issue_snapshot_detail', args=[self.pk])
+
+
+class CompanyPrepSnapshot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='company_prep_snapshots')
+    title = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
+    summary = models.TextField(blank=True)
+    payload = models.JSONField(default=dict)
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'fingerprint')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def display_name(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('techbrat:company_prep_detail', args=[self.pk])
 

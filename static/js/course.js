@@ -171,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-body">
                     <div class="card-badges">
                         <span class="badge badge-level">${escapeHTML(c.level_display || c.level)}</span>
-                        ${c.is_ai ? '<span class="badge badge-ai"><i class="fas fa-robot"></i> AI</span>' : ''}
                         <span class="badge ${c.is_free ? 'badge-free' : 'badge-paid'}">
                             ${c.is_free ? 'Free' : 'Paid'}
                         </span>
@@ -187,6 +186,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a href="${escapeHTML(c.link)}" target="_blank" rel="noopener" class="btn-start">
                             Start Course <i class="fas fa-arrow-right"></i>
                         </a>
+                        ${c.detail_url ? `
+                        <a href="${escapeHTML(c.detail_url)}" class="btn-preview btn-details">
+                            <i class="fas fa-up-right-from-square"></i> Details
+                        </a>
+                        ` : ''}
+                        ${c.id ? `
+                        <button
+                            type="button"
+                            class="save-toggle-btn course-save-btn ${c.saved ? 'is-saved' : ''}"
+                            data-object-id="${c.id}"
+                            data-content-type="${escapeHTML(c.content_type || 'course')}"
+                            data-saved="${c.saved ? 'true' : 'false'}">
+                            <i class="${c.saved ? 'fas' : 'far'} fa-bookmark"></i>
+                            <span data-save-label>${c.saved ? 'Saved Course' : 'Save Course'}</span>
+                        </button>
+                        ` : ''}
                         <button class="btn-preview" data-course='${escapeAttr(JSON.stringify({
                             title: c.title,
                             platform: c.platform,
@@ -199,20 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </button>
                     </div>
 
-                    <div class="preview-panel">
-                        <div class="preview-platform">${escapeHTML(c.platform)}</div>
-                        <div class="preview-description">${escapeHTML(c.description)}</div>
-                        <div class="preview-meta">
-                            <span class="preview-meta-item"><i class="far fa-clock"></i> ${escapeHTML(c.duration || 'Self-paced')}</span>
-                            <span class="preview-meta-item"><i class="fas fa-graduation-cap"></i> ${escapeHTML(c.learning_type_display || c.learning_type)}</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         `).join('');
 
         updateCount(courses.length);
-        attachPreviewPositioning();
         attachMobilePreviewHandlers();
     }
 
@@ -251,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bannerText.innerHTML = `
             <p class="hero-subtitle">
                 <i class="fas fa-sparkles" style="margin-right:6px;color:#818cf8"></i>
-                Showing <strong>${count} course${count !== 1 ? 's' : ''}</strong> — AI-enhanced recommendations updated dynamically.
+                Showing <strong>${count} course${count !== 1 ? 's' : ''}</strong> updated dynamically.
             </p>
         `;
     }
@@ -260,26 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (courseCountEl) {
             courseCountEl.textContent = `${n} course${n !== 1 ? 's' : ''}`;
         }
-    }
-
-    /* =======================================
-       PREVIEW POSITIONING (Viewport-safe)
-    ======================================= */
-
-    function attachPreviewPositioning() {
-        document.querySelectorAll('.course-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const panel = card.querySelector('.preview-panel');
-                if (!panel) return;
-                const cardRect = card.getBoundingClientRect();
-                const panelWidth = 280 + 12;
-                if (cardRect.right + panelWidth > window.innerWidth) {
-                    panel.classList.add('flip-left');
-                } else {
-                    panel.classList.remove('flip-left');
-                }
-            });
-        });
     }
 
     /* =======================================
@@ -292,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const previewModal = new bootstrap.Modal(modalEl);
 
-        document.querySelectorAll('.btn-preview').forEach(btn => {
+        document.querySelectorAll('.btn-preview[data-course]').forEach(btn => {
             btn.addEventListener('click', () => {
                 try {
                     const d = JSON.parse(btn.dataset.course || '{}');

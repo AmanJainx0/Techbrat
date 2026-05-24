@@ -6,11 +6,11 @@ actionable motivation via AI fallback.
 """
 
 import json
-import requests
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
 from techbrat.models import Tip
+from utils.openrouter_client import post_openrouter
 
 
 # ─── Non-Tech Keywords (Fast Filter) ───────────────────────────
@@ -46,7 +46,7 @@ def is_tip_tech_related(title, explanation):
         return True, ""
     
     try:
-        response = requests.post(
+        response = post_openrouter(
             'https://openrouter.ai/api/v1/chat/completions',
             headers={
                 'Authorization': f'Bearer {api_key}',
@@ -174,7 +174,7 @@ Examples of GOOD tips:
 Generate NOW:"""
 
     try:
-        response = requests.post(
+        response = post_openrouter(
             'https://openrouter.ai/api/v1/chat/completions',
             headers={
                 'Authorization': f'Bearer {api_key}',

@@ -1,0 +1,691 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Growth Hub - techBrat{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-chart-line"></i> Career Growth Hub
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Track growth, close gaps, and turn progress into real career momentum.</h1>
+        <p class="page-hero-copy mb-0">
+          This hub combines your roadmap progress, readiness, skill gaps, action plan, portfolio direction, and apply-readiness in one place.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="border rounded-4 bg-white p-3 h-100">
+                  <div class="text-muted small text-uppercase fw-semibold mb-1">Saved Roadmaps</div>
+                  <div class="h3 mb-0">{{ total_saved_roadmaps }}</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border rounded-4 bg-white p-3 h-100">
+                  <div class="text-muted small text-uppercase fw-semibold mb-1">Current Streak</div>
+                  <div class="h3 mb-0" data-streak-days>{{ streak_days }} day{{ streak_days|pluralize }}</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border rounded-4 bg-white p-3 h-100">
+                  <div class="text-muted small text-uppercase fw-semibold mb-1">Completed Steps</div>
+                  <div class="h3 mb-0">{{ completed_steps }}</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border rounded-4 bg-white p-3 h-100">
+                  <div class="text-muted small text-uppercase fw-semibold mb-1">Overall Completion</div>
+                  <div class="h3 mb-0">{{ overall_completion }}%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 section-surface min-vh-100">
+  <div class="container">
+    <div class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Overview</p>
+          <h2 class="h3 fw-bold mb-0">{{ progress_overview.momentum_label }}</h2>
+        </div>
+        <span class="section-meta-badge">{{ progress_overview.overall_completion }}% overall progress</span>
+      </div>
+
+      <p class="text-muted mb-4">{{ progress_overview.momentum_summary }}</p>
+
+      <div class="row g-3 mb-4">
+        {% for fact in progress_overview.quick_facts %}
+        <div class="col-md-6 col-xl-3">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-1">{{ fact.label }}</div>
+            <div class="h4 mb-1">{{ fact.value }}</div>
+            <div class="text-secondary small">{{ fact.detail }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="border rounded-4 bg-light p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">What this means</div>
+            <p class="mb-2">{{ progress_overview.spotlight }}</p>
+            <p class="mb-0">{{ progress_overview.next_win }}</p>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Recent activity window</div>
+            <div class="fw-semibold mb-1">{{ progress_overview.recent_activity.window_label }}</div>
+            <div class="text-secondary small">
+              {{ progress_overview.recent_activity.completed_steps_last_7_days }} completed step{{ progress_overview.recent_activity.completed_steps_last_7_days|pluralize }}
+              across {{ progress_overview.recent_activity.active_days }} active day{{ progress_overview.recent_activity.active_days|pluralize }}.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="job-readiness" class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Job Readiness</p>
+          <h2 class="h3 fw-bold mb-0">Your current readiness score</h2>
+        </div>
+        <span class="section-meta-badge">{{ readiness.label }}</span>
+      </div>
+
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-4">
+          <div class="display-4 fw-bold text-primary mb-2">{{ readiness.score }}%</div>
+          <p class="text-muted mb-0">
+            {{ readiness.summary }}
+          </p>
+        </div>
+        <div class="col-lg-8">
+          <div class="row g-3">
+            <div class="col-sm-6 col-xl-3">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Profile</div>
+                <div class="h4 mb-0">{{ readiness.profile_completion }}%</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Skills</div>
+                <div class="h4 mb-0">{{ readiness.skills_count }}</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Roadmaps</div>
+                <div class="h4 mb-0">{{ readiness.roadmap_completion }}%</div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Consistency</div>
+                <div class="h4 mb-0">{{ readiness.consistency_score }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border rounded-4 bg-light p-3 mt-4">
+        <div class="text-muted small text-uppercase fw-semibold mb-1">Next readiness milestone</div>
+        <div class="fw-semibold">{{ readiness.next_milestone }}</div>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-3">Score breakdown</div>
+            <div class="vstack gap-3">
+              {% for component in readiness.components %}
+              <div class="border rounded-4 bg-light p-3">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                  <div>
+                    <div class="fw-semibold">{{ component.label }}</div>
+                    <div class="text-secondary small">{{ component.explanation }}</div>
+                  </div>
+                  <span class="badge {% if component.status == 'Strong' %}bg-success-subtle text-success border border-success-subtle{% else %}bg-warning-subtle text-warning border border-warning-subtle{% endif %}">
+                    {{ component.score }}/{{ component.max_score }}
+                  </span>
+                </div>
+                <div class="d-flex justify-content-between gap-3 small">
+                  <span class="text-muted">Current: {{ component.display_value }}</span>
+                  <span class="text-muted">{{ component.target }}</span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="border rounded-4 bg-white p-3 mb-4">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">What is already helping you</div>
+            <ul class="mb-0">
+              {% for strength in readiness.strengths %}
+              <li>{{ strength }}</li>
+              {% empty %}
+              <li>Your foundation is still forming, which is normal. Focus on one small finished step at a time.</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Profile clarity check</div>
+            <div class="vstack gap-2">
+              {% for check in readiness.profile_checks %}
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <div class="fw-semibold small">{{ check.label }}</div>
+                  <div class="text-secondary small">{{ check.detail }}</div>
+                </div>
+                {% if check.status %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Done</span>
+                {% else %}
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Missing</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if readiness.blockers %}
+      <div class="mt-4">
+        <p class="text-uppercase text-muted small fw-semibold mb-2">Main blockers</p>
+        <ul class="mb-0">
+          {% for blocker in readiness.blockers %}
+          <li>{{ blocker }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+    <div id="skill-gap" class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Skill Gap Engine</p>
+          <h2 class="h3 fw-bold mb-0">{{ skill_gap.track_label }}</h2>
+        </div>
+        <span class="section-meta-badge">{{ skill_gap.coverage }}% coverage</span>
+      </div>
+
+      <p class="text-muted mb-4">{{ skill_gap.simple_summary }}</p>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-1">Matched skills</div>
+            <div class="h4 mb-1">{{ skill_gap.matched_count }}</div>
+            <div class="text-secondary small">Skills already aligned with this path</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-1">Need improvement</div>
+            <div class="h4 mb-1">{{ skill_gap.improving_count }}</div>
+            <div class="text-secondary small">Skills you have, but should deepen</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-1">Still missing</div>
+            <div class="h4 mb-1">{{ skill_gap.missing_count }}</div>
+            <div class="text-secondary small">Core skills not yet visible in your profile</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Next focus</div>
+            <ul class="mb-0">
+              {% for skill in skill_gap.next_focus %}
+              <li>{{ skill }}</li>
+              {% empty %}
+              <li>Your core gaps are looking strong. Keep sharpening what you already know.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Missing skills</div>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in skill_gap.missing_skills %}
+              <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ skill }}</span>
+              {% empty %}
+              <span class="text-muted">No critical missing skills detected for this track.</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Existing strengths</div>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in skill_gap.strengths %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle">{{ skill }}</span>
+              {% empty %}
+              <span class="text-muted">Add stronger skills to move from planning into readiness.</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-3">Why these skills matter now</div>
+            <div class="vstack gap-3">
+              {% for item in skill_gap.focus_plan %}
+              <div class="border rounded-4 bg-light p-3">
+                <div class="fw-semibold mb-1">{{ item.skill }}</div>
+                <div class="text-secondary small mb-2">{{ item.reason }}</div>
+                <div class="small"><strong>Easy next move:</strong> {{ item.action }}</div>
+              </div>
+              {% empty %}
+              <div class="text-muted">Your immediate focus list is clear already, so keep compounding on your strongest skills.</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Aligned skills you already have</div>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              {% for skill in skill_gap.aligned_skills %}
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ skill.name }} • {{ skill.proficiency }}</span>
+              {% empty %}
+              <span class="text-muted">No aligned skills detected yet.</span>
+              {% endfor %}
+            </div>
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Track requirement set</div>
+            <div class="text-secondary small">
+              {{ skill_gap.required_skills|join:", " }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="action-plan" class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Action Plan</p>
+          <h2 class="h3 fw-bold mb-0">{{ action_plan.headline }}</h2>
+        </div>
+        <span class="section-meta-badge">Personalized</span>
+      </div>
+
+      <p class="text-muted mb-4">{{ action_plan.summary }}</p>
+      <div class="border rounded-4 bg-light p-3 mb-4">
+        <div class="text-muted small text-uppercase fw-semibold mb-1">Coach note</div>
+        <div>{{ action_plan.coach_note }}</div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">This week</div>
+            <ul class="mb-0">
+              {% for item in action_plan.this_week %}
+              <li>{{ item }}</li>
+              {% empty %}
+              <li>Keep your momentum going with one focused roadmap step today.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Today focus</div>
+            <ul class="mb-0">
+              {% for item in action_plan.today_focus %}
+              <li>{{ item }}</li>
+              {% empty %}
+              <li>Pick your highest-priority learning task and finish it before adding anything new.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Blockers to clear</div>
+            <ul class="mb-0">
+              {% for blocker in action_plan.blockers_to_clear %}
+              <li>{{ blocker }}</li>
+              {% empty %}
+              <li>No major blockers right now. Stay consistent and keep shipping progress.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Quick wins</div>
+            <ul class="mb-0">
+              {% for item in action_plan.quick_wins %}
+              <li>{{ item }}</li>
+              {% empty %}
+              <li>Protect your momentum with one small completed task today.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">This month</div>
+            <ul class="mb-0">
+              {% for item in action_plan.this_month %}
+              <li>{{ item }}</li>
+              {% empty %}
+              <li>Stay on the same path and keep compounding your progress.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {% if action_plan.primary_roadmap_title and action_plan.recommended_next_step %}
+      <div class="border rounded-4 bg-light p-3 mt-4">
+        <div class="text-muted small text-uppercase fw-semibold mb-1">Recommended next move</div>
+        <div class="fw-semibold">{{ action_plan.recommended_next_step }}</div>
+        <div class="text-secondary">{{ action_plan.primary_roadmap_title }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div id="portfolio-guidance" class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Project Guidance</p>
+          <h2 class="h3 fw-bold mb-0">{{ project_guidance.track_label }}</h2>
+        </div>
+        <span class="section-meta-badge">Portfolio</span>
+      </div>
+
+      <p class="text-muted mb-4">{{ project_guidance.summary }}</p>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Starter project</div>
+            <div class="fw-semibold mb-1">{{ project_guidance.starter_project.title }}</div>
+            <div class="text-secondary small mb-2">{{ project_guidance.starter_project.level }}</div>
+            <p class="mb-3">{{ project_guidance.starter_project.outcome }}</p>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in project_guidance.starter_project.skills %}
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Stretch project</div>
+            <div class="fw-semibold mb-1">{{ project_guidance.stretch_project.title }}</div>
+            <div class="text-secondary small mb-2">{{ project_guidance.stretch_project.level }}</div>
+            <p class="mb-3">{{ project_guidance.stretch_project.outcome }}</p>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in project_guidance.stretch_project.skills %}
+              <span class="badge bg-success-subtle text-success border border-success-subtle">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">What to prove</div>
+            <ul class="mb-3">
+              {% for point in project_guidance.proof_points %}
+              <li>{{ point }}</li>
+              {% endfor %}
+            </ul>
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Current focus</div>
+            <div class="d-flex flex-wrap gap-2">
+              {% for skill in project_guidance.project_focus %}
+              <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ skill }}</span>
+              {% empty %}
+              <span class="text-muted">Keep building with your strongest stack.</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border rounded-4 bg-light p-3 mt-4">
+        <div class="text-muted small text-uppercase fw-semibold mb-1">Suggested build order</div>
+        <div class="d-flex flex-wrap gap-2">
+          {% for project_name in project_guidance.build_order %}
+          <span class="badge rounded-pill bg-white text-dark border px-3 py-2">{{ forloop.counter }}. {{ project_name }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div id="application-readiness" class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Application Readiness</p>
+          <h2 class="h3 fw-bold mb-0">{{ application_readiness.status_label }}</h2>
+        </div>
+        <span class="section-meta-badge">{{ application_readiness.score }}%</span>
+      </div>
+
+      <p class="text-muted mb-4">{{ application_readiness.summary }}</p>
+      <div class="border rounded-4 bg-light p-3 mb-4">
+        <div class="text-muted small text-uppercase fw-semibold mb-1">In simple terms</div>
+        <div class="mb-2">{{ application_readiness.plain_english }}</div>
+        <div class="small text-secondary">{{ application_readiness.ready_count }} of {{ application_readiness.total_checks }} readiness checks are currently in a good place.</div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-3">Readiness checks</div>
+            <div class="vstack gap-3">
+              {% for check in application_readiness.checks %}
+              <div class="border rounded-4 bg-light p-3 d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <div class="fw-semibold">{{ check.label }}</div>
+                  <div class="text-secondary small">{{ check.detail }}</div>
+                </div>
+                {% if check.status %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Ready</span>
+                {% else %}
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Needs work</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="border rounded-4 bg-white p-3 h-100">
+            <div class="text-muted small text-uppercase fw-semibold mb-2">Next actions</div>
+            <ul class="mb-0">
+              {% for action in application_readiness.next_actions %}
+              <li>{{ action }}</li>
+              {% empty %}
+              <li>Keep moving through your roadmap and strengthen your proof-of-work.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-lg-5">
+        <div class="saved-gallery-card h-100 p-4 p-lg-5">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">This Week</p>
+          <h2 class="h4 fw-bold mb-3">Weekly step goal</h2>
+          <p class="text-muted mb-4">
+            Set how many roadmap steps you want to finish this week and use it as your execution target.
+          </p>
+
+          <form id="weeklyGoalForm" class="d-flex flex-column flex-sm-row gap-3 mb-4">
+            {% csrf_token %}
+            <input
+              type="number"
+              min="1"
+              class="form-control"
+              id="weeklyGoalInput"
+              value="{{ weekly_goal.goal.target_steps }}"
+              aria-label="Weekly goal target">
+            <button type="submit" class="btn btn-primary">Save Goal</button>
+          </form>
+
+          <div class="progress mb-3" style="height: 0.85rem;">
+            <div
+              class="progress-bar bg-primary"
+              role="progressbar"
+              style="width: {{ weekly_goal.completion_percentage }}%;"
+              aria-valuenow="{{ weekly_goal.completion_percentage }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              data-weekly-progress-bar></div>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-between gap-3">
+            <div>
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Completed This Week</div>
+              <div class="h4 mb-0" data-weekly-completed>{{ weekly_goal.completed_this_week }}</div>
+            </div>
+            <div>
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Target</div>
+              <div class="h4 mb-0" data-weekly-target>{{ weekly_goal.goal.target_steps }}</div>
+            </div>
+            <div>
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Remaining</div>
+              <div class="h4 mb-0" data-weekly-remaining>{{ weekly_goal.remaining_steps }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="saved-gallery-card h-100 p-4 p-lg-5">
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Momentum</p>
+          <h2 class="h4 fw-bold mb-3">Your learning streak</h2>
+          <p class="text-muted mb-4">
+            Every day you complete at least one roadmap step counts toward your streak and keeps momentum visible.
+          </p>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Active Streak</div>
+                <div class="display-6 fw-bold text-primary mb-0" data-streak-hero>{{ streak_days }}</div>
+                <div class="text-secondary">day{{ streak_days|pluralize }}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Week Window</div>
+                <div class="fw-semibold">{{ weekly_goal.week_start|date:"M d" }} - {{ weekly_goal.week_end|date:"M d" }}</div>
+                <div class="text-secondary">Current tracking period</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <div>
+        <h2 class="h3 fw-bold mb-1">Saved roadmap progress</h2>
+        <p class="text-muted mb-0">Each card shows what's done, what's left, and the next step to take.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      {% for card in roadmap_cards %}
+      <div class="col-lg-6">
+        <div class="saved-gallery-card h-100 p-4">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <span class="saved-gallery-pill">roadmap</span>
+              <h3 class="h4 fw-bold mt-3 mb-1">{{ card.snapshot.title }}</h3>
+              <p class="text-muted mb-0">{{ card.snapshot.prompt }}</p>
+            </div>
+            <span class="section-meta-badge">{{ card.completion_percentage }}%</span>
+          </div>
+
+          <div class="progress mb-3" style="height: 0.85rem;">
+            <div
+              class="progress-bar bg-primary"
+              role="progressbar"
+              style="width: {{ card.completion_percentage }}%;"
+              aria-valuenow="{{ card.completion_percentage }}"
+              aria-valuemin="0"
+              aria-valuemax="100"></div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Completed</div>
+                <div class="h5 mb-0">{{ card.completed_steps }}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="border rounded-4 bg-white p-3 h-100">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Remaining</div>
+                <div class="h5 mb-0">{{ card.remaining_steps }}</div>
+              </div>
+            </div>
+          </div>
+
+          {% if card.next_step %}
+          <div class="border rounded-4 bg-light p-3 mb-4">
+            <div class="text-muted small text-uppercase fw-semibold mb-1">Next Step</div>
+            <div class="fw-semibold">{{ card.next_step.title }}</div>
+          </div>
+          {% endif %}
+
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{{ card.snapshot.get_absolute_url }}" class="btn btn-primary">Continue Roadmap</a>
+            <a href="{% url 'techbrat:saved_items' %}" class="btn btn-outline-primary">Back to Saved Items</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="saved-gallery-card p-5 text-center">
+          <h2 class="h4 fw-bold mb-2">No saved roadmaps yet</h2>
+          <p class="text-muted mb-4">Save a roadmap first, then you'll be able to track step-by-step progress here.</p>
+          <a href="{% url 'techbrat:roadmap' %}" class="btn btn-primary">Generate a Roadmap</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/progress.js' %}"></script>
+{% endblock %}

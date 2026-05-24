@@ -1,11 +1,11 @@
-/* ═════════════ GENERAL STYLES ═════════════ */
 .hero-boost {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #2d1b4e 100%);
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 55%, #ecfeff 100%);
   position: relative;
   overflow: hidden;
   padding: 4rem 2rem;
   border-radius: 16px;
   margin-bottom: 3rem;
+  border: 1px solid rgba(37, 99, 235, 0.12);
 }
 
 .hero-boost::before {
@@ -15,7 +15,7 @@
   right: -20%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.14) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -27,7 +27,7 @@
   left: -10%;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 200, 170, 0.12) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -41,14 +41,14 @@
 .hero-boost h2 {
   font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
-  color: #e0e6f6;
+  color: #0f172a;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
 }
 
 .hero-boost p {
   font-size: 1.1rem;
-  color: #a0aec0;
+  color: #475569;
   margin-bottom: 1.5rem;
 }
 
@@ -56,12 +56,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(37, 99, 235, 0.12);
   padding: 0.75rem 1.5rem;
   border-radius: 50px;
   font-weight: 600;
-  color: #fbbf24;
+  color: #1d4ed8;
   backdrop-filter: blur(10px);
 }
 
@@ -75,10 +75,9 @@
   50% { opacity: 0.8; }
 }
 
-/* ═════════════ FILTER SECTION ═════════════ */
 .filter-section {
-  background: linear-gradient(135deg, #f5f7fa 0%, #fafbfc 100%);
-  border: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 3rem;
@@ -93,7 +92,6 @@
 
 .filter-group .form-group {
   flex: 1;
-  min-width: 200px;
   min-width: 150px;
 }
 
@@ -122,7 +120,7 @@
 
 .filter-btn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  background: linear-gradient(135deg, #2563eb, #00c8aa);
   color: white;
   border: none;
   border-radius: 8px;
@@ -134,10 +132,9 @@
 
 .filter-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
 }
 
-/* ═════════════ TIP CARDS ═════════════ */
 .tips-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -162,7 +159,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  background: linear-gradient(90deg, #2563eb, #00c8aa);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -181,7 +178,7 @@
 .tip-icon {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  background: linear-gradient(135deg, #2563eb, #00c8aa);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -219,7 +216,7 @@
 }
 
 .tip-action {
-  background: #f3f4f6;
+  background: #f8fafc;
   border-left: 3px solid #2563eb;
   padding: 1rem;
   border-radius: 6px;
@@ -229,12 +226,11 @@
 }
 
 .tip-action::before {
-  content: '✓ Action: ';
+  content: 'Action: ';
   color: #2563eb;
   font-weight: 700;
 }
 
-/* ═════════════ EMPTY STATE ═════════════ */
 .empty-state {
   text-align: center;
   padding: 3rem 1.5rem;
@@ -252,82 +248,31 @@
   margin-bottom: 0.5rem;
 }
 
-/* ═════════════ LOADING STATE ═════════════ */
 .loading-spinner {
   display: flex;
   justify-content: center;
   padding: 2rem;
 }
 
-/* ═════════════ QUICK ACTION BUTTONS ═════════════ */
 .quick-actions {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
   border-radius: 12px;
   padding: 2rem;
   margin-top: 3rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  display: block;
+  border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
 .action-btn {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   background: #fff;
   border: 2px solid #d1d5db;
-  border-radius: 8px;
+  border-radius: 12px;
   color: #1f2937;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.action-btn:hover {
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-2px);
-}
-
-/* ═════════════ RESPONSIVE ═════════════ */
-@media (max-width: 768px) {
-  .tips-container {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-group {
-    flex-direction: column;
-  }
-
-  .filter-group .form-group {
-    width: 100%;
-  }
-
-  .filter-btn {
-    width: 100%;
-  }
-
-  .quick-actions {
-    grid-template-columns: 1fr;
-  }
-}
-
-.tip-action::before {
-  content: 'Action: ';
-}
-
-.quick-actions {
-  display: block;
-}
-
-.action-btn {
-  padding: 1.25rem 1.5rem;
-  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -335,6 +280,13 @@
   gap: 0.75rem;
   min-height: 100%;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.action-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #00c8aa);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
 }
 
 .action-btn i {
@@ -361,6 +313,19 @@
 }
 
 @media (max-width: 768px) {
+  .tips-container {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-group {
+    flex-direction: column;
+  }
+
+  .filter-group .form-group,
+  .filter-btn {
+    width: 100%;
+  }
+
   .quick-actions {
     padding: 1.5rem;
   }

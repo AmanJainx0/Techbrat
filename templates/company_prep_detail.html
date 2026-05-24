@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ snapshot.title }} - Company Prep{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light min-vh-100">
+  <div class="container">
+    <div class="saved-gallery-card p-4 p-lg-5">
+      <span class="saved-gallery-pill mb-3">company prep</span>
+      <h1 class="h2 fw-bold mb-2">{{ snapshot.title }}</h1>
+      <p class="text-muted mb-4">{{ snapshot.company }} | {{ snapshot.role }}</p>
+
+      <div class="company-prep-detail-text">{{ plan_text|linebreaks }}</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

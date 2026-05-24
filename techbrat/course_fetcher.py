@@ -6,8 +6,8 @@ platform-specific URLs, and provides deduplication utilities.
 """
 
 import json
-import requests
 from django.conf import settings
+from utils.openrouter_client import post_openrouter
 
 
 # ─── External Course Fetcher ───────────────────────────────────
@@ -106,7 +106,7 @@ def _call_openrouter(api_key, model, prompt, level, domain_text, learning_type, 
     Returns list[dict] on success, or None on failure.
     """
     try:
-        response = requests.post(
+        response = post_openrouter(
             url="https://openrouter.ai/api/v1/chat/completions",
             headers={
                 "Authorization": f"Bearer {api_key}",

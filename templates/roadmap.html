@@ -8,29 +8,44 @@
 {% endblock %}
 
 {% block content %}
-<!-- âœ… Input Box for Custom Roadmap -->
-<section class="container text-center mt-5">
-  <h1 class="fw-bold">Generate Your Learning Roadmap</h1>
-  <p class="text-warning">Enter a topic and generate roadmap (Ex: MERN Roadmap)</p>
-
-  <div class="input-group mb-3 w-75 mx-auto">
-    <input type="text" id="roadmapInput" class="form-control" placeholder="Ex: MERN Roadmap" />
-    <button class="btn btn-primary" id="generateRoadmapBtn" type="button">
-      Generate
-    </button>
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-map-signs"></i> Guided Learning
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Generate a roadmap that turns a topic into clear next steps.</h1>
+        <p class="page-hero-copy mb-0">
+          Start with a role or topic such as MERN, cloud computing, or data science and get a structured plan with resources.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card border-0 shadow-sm">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h4 fw-bold text-primary mb-3">Roadmap Generator</h2>
+            <p class="text-secondary mb-4">Generate a roadmap from scratch or jump in through one of the featured paths below.</p>
+            <div class="input-group">
+              {% csrf_token %}
+              <input type="text" id="roadmapInput" class="form-control" placeholder="Ex: MERN Roadmap" />
+              <button class="btn btn-primary" id="generateRoadmapBtn" type="button">
+                Generate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- âœ… Generated Roadmap Display -->
-<section class="container mt-5">
-  <div id="roadmap-container" class="px-4 py-3"></div>
+<section class="container py-5">
+  <div id="roadmap-container" class="px-0 py-0"></div>
 </section>
 
-<!-- âœ… Roadmap Cards -->
-<section class="container mt-5">
+<section class="container pb-5">
   <div class="row g-4">
 
-    <!-- âœ… Cloud Computing -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/color/96/000000/cloud.png" class="mx-auto mb-3" width="100" />
@@ -41,7 +56,6 @@
       </div>
     </div>
 
-    <!-- âœ… MERN Stack -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/color/96/000000/react-native.png" class="mx-auto mb-3" width="100" />
@@ -52,7 +66,6 @@
       </div>
     </div>
 
-    <!-- âœ… AI / Machine Learning -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/color/96/000000/artificial-intelligence.png" class="mx-auto mb-3"
@@ -64,7 +77,6 @@
       </div>
     </div>
 
-    <!-- âœ… Cyber Security -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/fluency/96/lock.png" class="mx-auto mb-3" width="100" />
@@ -75,7 +87,6 @@
       </div>
     </div>
 
-    <!-- âœ… Data Science -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/color/96/000000/combo-chart.png" class="mx-auto mb-3" width="100" />
@@ -86,7 +97,6 @@
       </div>
     </div>
 
-    <!-- âœ… Android Development -->
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 text-center p-4 shadow-sm">
         <img src="https://img.icons8.com/color/96/000000/android-os.png" class="mx-auto mb-3" width="100" />

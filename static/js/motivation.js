@@ -89,6 +89,23 @@ function createTipCard(tip) {
   clone.getElementById('tipExplanation').textContent = tip.explanation;
   clone.getElementById('tipAction').textContent = tip.action_step;
 
+  const detailsLink = clone.getElementById('tipDetails');
+  if (tip.detail_url) {
+    detailsLink.href = tip.detail_url;
+    detailsLink.classList.remove('d-none');
+  }
+
+  const saveButton = clone.getElementById('tipSave');
+  if (tip.id) {
+    saveButton.dataset.objectId = tip.id;
+    saveButton.dataset.contentType = tip.content_type || 'tip';
+    saveButton.dataset.saved = tip.saved ? 'true' : 'false';
+    saveButton.classList.toggle('is-saved', Boolean(tip.saved));
+    saveButton.classList.remove('d-none');
+    saveButton.querySelector('i').className = tip.saved ? 'fas fa-bookmark' : 'far fa-bookmark';
+    saveButton.querySelector('[data-save-label]').textContent = tip.saved ? 'Saved' : 'Save';
+  }
+
   return clone;
 }
 

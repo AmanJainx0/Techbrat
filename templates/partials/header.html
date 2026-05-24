@@ -12,7 +12,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
+            <ul class="navbar-nav ms-auto align-items-center gap-lg-1">
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == '/' or request.path == '/index/' %}active{% endif %}"
                         href="{% url 'techbrat:index' %}">Home</a>
@@ -21,17 +21,16 @@
                     <a class="nav-link {% if request.path == '/que/' %}active{% endif %}" href="{% url 'techbrat:que' %}">Career Paths</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'techbrat:index' %}#resources">Curated Resources</a>
+                    <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link {% if request.path == '/roadmap/' %}active{% endif %}">Roadmaps</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'techbrat:index' %}#learning-journey">Learning Journey</a>
+                    <a class="nav-link {% if request.path == '/courses/' or request.path == '/books/' or request.path == '/tools/' %}active{% endif %}" href="{% url 'techbrat:index' %}#resources">Resources</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'techbrat:index' %}#contact">Contact</a>
+                    <a class="nav-link {% if request.path == '/company-prep/' %}active{% endif %}" href="{% url 'techbrat:company_prep' %}">Company Prep</a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'techbrat:roadmap' %}?path=web" class="nav-link {% if request.path == '/roadmap/' %}active{% endif %}">Explore Roadmap</a>
-                </li>
+                {% endif %}
 
                 <li class="nav-item">
                     {% if user.is_authenticated %}
@@ -49,6 +48,12 @@
                             <a href="{% url 'techbrat:profile' %}" class="dropdown-item-custom {% if request.path == '/profile/' %}active{% endif %}">
                                 <i class="fas fa-user-circle"></i>
                                 <span>View Profile</span>
+                            </a>
+
+                            <a href="{% url 'techbrat:saved_items' %}" class="dropdown-item-custom {% if request.path == '/saved/' %}active{% endif %}">
+                                <i class="fas fa-bookmark"></i>
+                                <span>Saved Items</span>
+                                <span class="ms-auto badge bg-primary-subtle text-primary" data-saved-count>{{ saved_items_count }}</span>
                             </a>
 
                             <!-- <a href="#" class="dropdown-item-custom future-feature">

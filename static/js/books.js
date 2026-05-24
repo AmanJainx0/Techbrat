@@ -14,15 +14,25 @@ try {
 }
 
 function cardHtml(b) {
-  const aiBadge = b.is_ai_generated
-    ? `<span class="badge bg-light text-primary mb-2"><i class="fas fa-magic me-1"></i>AI Recommended</span>`
+  const detailsButton = b.detail_url
+    ? `<a href="${b.detail_url}" class="btn btn-outline-primary w-100">View Details</a>`
+    : "";
+  const saveButton = b.id
+    ? `<button
+         type="button"
+         class="save-toggle-btn book-save-btn ${b.saved ? "is-saved" : ""}"
+         data-object-id="${b.id}"
+         data-content-type="${b.content_type || "book"}"
+         data-saved="${b.saved ? "true" : "false"}">
+         <i class="${b.saved ? "fas" : "far"} fa-bookmark"></i>
+         <span data-save-label>${b.saved ? "Saved Book" : "Save Book"}</span>
+       </button>`
     : "";
 
   return `
     <div class="col-md-6 col-lg-4">
       <div class="card book-card h-100 border-0 shadow-sm p-4">
         <div class="card-body d-flex flex-column p-0">
-          ${aiBadge}
           <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="fw-bold text-primary mb-0">${b.title}</h5>
             <span class="badge bg-light text-secondary border small">${b.level || "Any"}</span>
@@ -33,9 +43,13 @@ function cardHtml(b) {
             <span class="badge bg-info-subtle text-info border border-info-subtle">${b.domain || "General"}</span>
             <span class="badge bg-success-subtle text-success border border-success-subtle">${b.book_type || "Book"}</span>
           </div>
-          <a href="${b.link}" target="_blank" class="btn btn-success mt-auto w-100" style="border-radius: 8px;">
-            View Book <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
-          </a>
+          <div class="d-grid gap-2 mt-auto">
+            <a href="${b.link}" target="_blank" class="btn btn-success w-100" style="border-radius: 8px;">
+              View Book <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
+            </a>
+            ${detailsButton}
+            ${saveButton}
+          </div>
         </div>
       </div>
     </div>`;
@@ -105,7 +119,7 @@ async function fetchFiltered() {
       ? data.data.map(cardHtml).join("")
       : `<div class="col-12 text-center py-5">
            <h5 class="text-muted">No books found</h5>
-           <p class="text-secondary">Try adjusting filters or explore AI recommendations below.</p>
+           <p class="text-secondary">Try adjusting filters or explore more suggestions below.</p>
          </div>`;
   } catch (e) {
     showError(e.message);
@@ -118,7 +132,7 @@ document.getElementById("filterBtn").addEventListener("click", (e) => {
   fetchFiltered();
 });
 
-// Load main content first, then AI suggestions as enhancement.
+// Load main content first, then additional suggestions as enhancement.
 fetchFiltered().finally(() => {
   fetchAI();
 });

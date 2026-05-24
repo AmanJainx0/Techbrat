@@ -2,18 +2,58 @@
 {% load static %}
 
 {% block title %}Issue Assistance - techBrat{% endblock %}
+{% block body_class %}issue-page{% endblock %}
 
 {% block content %}
-<section class="py-5">
+<section class="page-hero">
   <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold text-primary">Learning Issue Assistance</h2>
-      <p class="text-secondary">Describe the problem you're facing while learning, and get guidance.</p>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-life-ring"></i> Learning Support
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Get unstuck with practical guidance that matches your problem.</h1>
+        <p class="page-hero-copy mb-0">
+          Describe the issue you’re facing and get a clear explanation, better study directions, and actionable next steps.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h4 fw-bold text-primary mb-3">How this helps</h2>
+            <div class="hero-summary-list">
+              <div class="hero-summary-item">
+                <i class="fas fa-search"></i>
+                <span>Clarify the exact concept or blockage you’re dealing with.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>Get simpler learning alternatives and practice ideas.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Save useful guidance so you can revisit it later.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
+<section class="py-5 section-surface">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8">
-        <div class="card p-4 shadow-sm">
+        <div class="tb-form-shell card">
+          <div class="card-body p-4 p-lg-5">
+          <div class="section-heading mb-4">
+            <div>
+              <p class="text-uppercase text-muted small fw-semibold mb-1">Support Form</p>
+              <h2 class="h4 fw-bold mb-0">Describe where you are stuck</h2>
+            </div>
+          </div>
           <form id="issueForm">
             {% csrf_token %}
 
@@ -30,6 +70,7 @@
             <h5 class="text-primary">Guidance:</h5>
             <div id="responseContent" class="mt-2"></div>
           </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,5 +79,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/issue.js' %}"></script>
+<script src="{% static 'js/issue_page.js' %}"></script>
 {% endblock %}

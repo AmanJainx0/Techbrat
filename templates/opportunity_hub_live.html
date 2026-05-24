@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Opportunity Hub - techBrat{% endblock %}
+
+{% block body_class %}opportunity-hub-page{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3"><i class="fas fa-bullhorn"></i> Opportunity Hub</span>
+        <h1 class="page-hero-title fw-bold mb-3">{{ opportunity_hub.headline }}</h1>
+        <p class="page-hero-copy mb-0">Explore live openings merged from multiple job APIs, then switch between India and abroad with simple filters so the search stays broad, fresh, and easy to use.</p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <div class="text-uppercase text-muted small fw-semibold mb-2">Current Apply Status</div>
+            <div class="display-6 fw-bold text-primary mb-2">{{ opportunity_hub.readiness_label }}</div>
+            <p class="text-secondary mb-0">We start with your current track, <strong>{{ opportunity_hub.track_label }}</strong>, and suggest a search that is easy to refine from there.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 section-surface min-vh-100">
+  <div class="container">
+    <div class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="section-heading mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Live Search</p>
+          <h2 class="h3 fw-bold mb-0">Filter openings by what matters to you</h2>
+        </div>
+      </div>
+      <form id="opportunityFilters" class="opportunity-filter-grid">
+        <div>
+          <label class="form-label fw-semibold" for="opportunityKeyword">Keyword</label>
+          <input class="form-control" id="opportunityKeyword" name="keyword" type="text" value="{{ opportunity_hub.default_keyword }}" placeholder="Data analyst, frontend, Python, AI">
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="opportunityLocation">Location</label>
+          <input class="form-control" id="opportunityLocation" name="location" type="text" placeholder="Remote, Bengaluru, Hyderabad">
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="opportunityType">Type</label>
+          <select class="form-select" id="opportunityType" name="opportunity_type">
+            <option value="all">All opportunities</option>
+            <option value="internship">Internships</option>
+            <option value="job">Jobs</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="opportunityRegion">Region</label>
+          <select class="form-select" id="opportunityRegion" name="region">
+            <option value="all">Worldwide</option>
+            <option value="india">India</option>
+            <option value="abroad">Abroad</option>
+          </select>
+        </div>
+        <div class="opportunity-filter-checks">
+          <label class="form-check opportunity-check">
+            <input class="form-check-input" type="checkbox" name="remote_only" value="true">
+            <span class="form-check-label">Remote only</span>
+          </label>
+          <label class="form-check opportunity-check">
+            <input class="form-check-input" type="checkbox" name="paid_only" value="true">
+            <span class="form-check-label">Paid only</span>
+          </label>
+        </div>
+        <div class="d-flex align-items-end gap-2">
+          <button class="btn btn-primary opportunity-submit" type="submit">Find live openings</button>
+          <button class="btn btn-outline-secondary" id="opportunityReset" type="button">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="saved-gallery-card p-4 p-lg-5 mb-4">
+      <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center mb-3">
+        <div>
+          <p class="text-uppercase text-muted small fw-semibold mb-1">Results</p>
+          <h2 class="h3 fw-bold mb-0">Live internships and job openings</h2>
+        </div>
+        <div class="opportunity-meta">
+          <div class="fw-semibold"><span id="opportunityCount">0</span> matches</div>
+          <div class="text-secondary small" id="opportunityFetchedAt">Checking source pages...</div>
+        </div>
+      </div>
+
+      <div id="opportunityNotes" class="opportunity-notes d-none"></div>
+
+      <div id="opportunityLoading" class="opportunity-state">
+        <div class="spinner-border text-primary" role="status" aria-hidden="true"></div>
+        <p class="mb-0">Pulling and merging the latest records from the configured job APIs.</p>
+      </div>
+
+      <div id="opportunityError" class="opportunity-state d-none">
+        <i class="fas fa-circle-exclamation"></i>
+        <p class="mb-0">We could not load live opportunities right now. Please try again in a moment.</p>
+      </div>
+
+      <div id="opportunityEmpty" class="opportunity-state d-none">
+        <i class="fas fa-search"></i>
+        <p class="mb-0">No openings matched these filters. Try a broader keyword or remove one filter.</p>
+      </div>
+
+      <div id="opportunityResults" class="row g-4"></div>
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mt-4 d-none" id="opportunityPagination">
+        <div class="text-secondary small" id="opportunityPageInfo">Page 1</div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary" type="button" id="opportunityPrev">Previous</button>
+          <button class="btn btn-outline-secondary" type="button" id="opportunityNext">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="opportunityDetailModal" tabindex="-1" aria-labelledby="opportunityDetailLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content opportunity-modal">
+          <div class="modal-header border-0 pb-0">
+            <div>
+              <div class="opportunity-badges mb-3" id="opportunityDetailBadges"></div>
+              <h3 class="modal-title h4 fw-bold mb-1" id="opportunityDetailLabel">Opportunity details</h3>
+              <div class="text-secondary" id="opportunityDetailCompany"></div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-2">
+            <div class="opportunity-detail-grid mb-4">
+              <div><span>Location</span><strong id="opportunityDetailLocation">Not specified</strong></div>
+              <div><span>Mode</span><strong id="opportunityDetailMode">Not specified</strong></div>
+              <div><span>Compensation</span><strong id="opportunityDetailCompensation">Not specified</strong></div>
+              <div><span>Posted</span><strong id="opportunityDetailPosted">Recently listed</strong></div>
+              <div><span>Deadline</span><strong id="opportunityDetailDeadline">Not specified</strong></div>
+              <div><span>Source</span><strong id="opportunityDetailSource">Not specified</strong></div>
+            </div>
+            <div class="opportunity-detail-section">
+              <div class="text-uppercase text-muted small fw-semibold mb-2">Summary</div>
+              <p class="mb-0" id="opportunityDetailSummary">Open the source listing for full information.</p>
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer" id="opportunityDetailLink">Open source listing</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="saved-gallery-card p-4 p-lg-5 h-100">
+          <div class="text-uppercase text-muted small fw-semibold mb-2">How to use this well</div>
+          <ul class="tb-info-list mb-0">
+            <li><i class="fas fa-bullseye"></i><span>Start with a role or skill keyword, then narrow by location or remote preference.</span></li>
+            <li><i class="fas fa-filter"></i><span>Use the region filter to quickly switch between India-only roles, abroad roles, or a wider global search.</span></li>
+            <li><i class="fas fa-bolt"></i><span>Re-run the search when you change focus. The hub caches results briefly, then merges and cleans the provider results before showing them.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="saved-gallery-card p-4 p-lg-5 h-100">
+          <div class="text-uppercase text-muted small fw-semibold mb-2">What this data means</div>
+          <ul class="tb-info-list mb-0">
+            <li><i class="fas fa-link"></i><span>Each card links to the original record when the API returns a detail or apply URL.</span></li>
+            <li><i class="fas fa-clock"></i><span>The hub reads live API responses, so the exact fields shown depend on what each provider exposes.</span></li>
+            <li><i class="fas fa-globe"></i><span>India and abroad are frontend-facing filters, while the backend uses multiple providers and removes duplicates to keep coverage wide.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.opportunityHubConfig = {
+    apiUrl: "{% url 'techbrat:live_opportunities' %}"
+  };
+</script>
+<script src="{% static 'js/opportunity_hub.js' %}"></script>
+{% endblock %}

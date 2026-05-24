@@ -8,18 +8,59 @@
 <link rel="stylesheet" href="{% static 'css/books.css' %}">
 {% endblock %}
 
+{% block body_class %}books-page{% endblock %}
+
 {% block content %}
-<!-- Hero -->
-<section class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">Curated Books for Your Growth</h2>
-        <p class="text-muted">Discover books tailored to your learning journey</p>
+<section class="page-hero">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <span class="page-hero-badge mb-3">
+                    <i class="fas fa-book-open"></i> Curated Resources
+                </span>
+                <h1 class="page-hero-title fw-bold mb-3">Build stronger fundamentals with the right books.</h1>
+                <p class="page-hero-copy mb-0">
+                    Explore technical reads by level, domain, and book type, then save the best ones to your learning shortlist.
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="feature-panel card h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <h2 class="h4 fw-bold text-primary mb-3">Book Discovery</h2>
+                        <p class="text-secondary mb-0">
+                            Blend filtered database results with tailored recommendations without leaving the page.
+                        </p>
+                        <div class="hero-summary-list">
+                            <div class="hero-summary-item">
+                                <i class="fas fa-layer-group"></i>
+                                <span>Filter by level, domain, and theory vs practical focus.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-sparkles"></i>
+                                <span>Get tailored suggestion cards based on your current profile.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-bookmark"></i>
+                                <span>Save books directly into the shared Saved Items gallery.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Filter section -->
-<section class="container mb-5">
-    <div class="card shadow-sm p-4">
+<section class="section-surface py-5">
+  <div class="container">
+    <div class="feature-panel card">
+      <div class="card-body p-4 p-lg-5">
+        <div class="section-heading">
+          <div>
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Filter Library</p>
+            <h2 class="h4 fw-bold mb-0">Find books that fit your next learning sprint</h2>
+          </div>
+        </div>
       <div class="row g-3 align-items-end">
         <div class="col-md-4">
           <label class="form-label mb-1">Level</label>
@@ -47,29 +88,41 @@
           <button class="btn btn-primary" id="filterBtn"><i class="fas fa-filter me-1"></i>Go</button>
         </div>
       </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- Main filtered books -->
-<section class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold mb-0">Filtered Books</h3>
-      <small class="text-muted">AI recommendations are below</small>
+<section class="py-5">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="text-uppercase text-muted small fw-semibold mb-1">Filtered Results</p>
+        <h3 class="fw-bold mb-0">Books matched to your filters</h3>
+      </div>
+      <span class="section-meta-badge">More suggestions below</span>
     </div>
     <div class="row g-4" id="filteredBooks"></div>
+  </div>
 </section>
 
-<!-- AI recommendations -->
-<section class="container py-5 bg-light rounded-3">
-    <h4 class="fw-bold mb-4 text-primary">
-        <i class="fas fa-magic text-primary me-2"></i>
-        Recommended For You
-    </h4>
+<section class="section-surface py-5">
+  <div class="container">
+    <div class="feature-panel card">
+      <div class="card-body p-4 p-lg-5">
+        <div class="section-heading">
+          <div>
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Suggested Reads</p>
+            <h4 class="fw-bold mb-0 text-primary">More Picks For You</h4>
+          </div>
+        </div>
     <div class="row g-4" id="aiBooks"></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Errors -->
-<section class="container mt-4">
+<section class="container mt-4 mb-5">
     <div class="alert alert-warning d-none" id="bookError"></div>
 </section>
 

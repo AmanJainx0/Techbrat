@@ -8,17 +8,59 @@
 <link rel="stylesheet" href="{% static 'css/tools.css' %}">
 {% endblock %}
 
+{% block body_class %}tools-page{% endblock %}
+
 {% block content %}
-<!-- Hero Section -->
-<section class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold display-5">Tools & Platforms</h2>
-        <p class="text-muted fs-5">Discover essential development tools, platforms, and services curated for your success</p>
+<section class="page-hero">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <span class="page-hero-badge mb-3">
+                    <i class="fas fa-toolbox"></i> Curated Resources
+                </span>
+                <h1 class="page-hero-title fw-bold mb-3">Discover the tools that move your workflow forward.</h1>
+                <p class="page-hero-copy mb-0">
+                    Search by use case, difficulty, and category to find the platforms, IDEs, and services that match your current learning stage.
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="feature-panel card h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <h2 class="h4 fw-bold text-primary mb-3">Tool Explorer</h2>
+                        <p class="text-secondary mb-0">
+                            Pair practical tools with tailored discovery so your setup evolves with your goals.
+                        </p>
+                        <div class="hero-summary-list">
+                            <div class="hero-summary-item">
+                                <i class="fas fa-filter"></i>
+                                <span>Filter by category, difficulty, and intended use case.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                <span>Surface additional suggestions after each search.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-bookmark"></i>
+                                <span>Save valuable tools directly into your shared shortlist.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Filter Section -->
-<section class="container mb-5">
+<section class="section-surface py-5">
+  <div class="container">
+    <div class="feature-panel card">
+      <div class="card-body p-4 p-lg-5">
+        <div class="section-heading">
+          <div>
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Tool Search</p>
+            <h2 class="h4 fw-bold mb-0">Find the right platforms faster</h2>
+          </div>
+        </div>
     <div class="filter-card shadow-sm">
       <form id="toolsFilterForm" class="row g-3 align-items-end">
         <div class="col-md-4">
@@ -59,13 +101,19 @@
         </div>
       </form>
     </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Main Tools Section -->
-<section class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold mb-0">Discover Tools</h3>
-      <small class="text-muted" id="toolCount">Loading...</small>
+<section class="py-5">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="text-uppercase text-muted small fw-semibold mb-1">Search Results</p>
+        <h3 class="fw-bold mb-0">Discover Tools</h3>
+      </div>
+      <span class="section-meta-badge" id="toolCount">Loading...</span>
     </div>
     <div class="row g-4" id="filteredTools">
       <div class="loading-spinner">
@@ -74,14 +122,17 @@
         </div>
       </div>
     </div>
+  </div>
 </section>
 
-<!-- AI Recommendations Section -->
-<section class="container mb-5">
+<section class="section-surface py-5">
+  <div class="container">
+    <div class="feature-panel card">
+      <div class="card-body p-4 p-lg-5">
     <div class="ai-section">
       <div class="ai-header">
         <i class="fas fa-wand-magic-sparkles"></i>
-        <h4 class="fw-bold mb-0">AI-Recommended Tools</h4>
+        <h4 class="fw-bold mb-0">More Tool Suggestions</h4>
       </div>
       <div class="row g-4" id="aiTools">
         <div class="loading-spinner">
@@ -91,6 +142,9 @@
         </div>
       </div>
     </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Error Message -->
@@ -116,10 +170,18 @@
           <span class="tool-badge" id="toolUseCase"></span>
         </div>
         <div class="pt-3 border-top">
-          <a href="#" class="tool-link" id="toolLink" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-external-link-alt me-1"></i>Visit Tool
-          </a>
-          <small class="text-muted" id="aiGeneratedBadge" class="d-block mt-2"></small>
+          <div class="d-grid gap-2">
+            <a href="#" class="tool-link" id="toolLink" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-external-link-alt me-1"></i>Visit Tool
+            </a>
+            <a href="#" class="btn btn-outline-primary d-none" id="toolDetails">
+              <i class="fas fa-up-right-from-square me-1"></i>View Details
+            </a>
+            <button type="button" class="save-toggle-btn d-none" id="toolSave">
+              <i class="far fa-bookmark"></i>
+              <span data-save-label>Save</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

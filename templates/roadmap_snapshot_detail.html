@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ snapshot.title }} - Roadmap{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-map-signs"></i> Saved Roadmap
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">{{ roadmap.roadmap_title|default:snapshot.title }}</h1>
+        <p class="page-hero-copy mb-0">Prompt: {{ snapshot.prompt }}</p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <p class="text-uppercase text-muted small fw-semibold mb-2">Progress Summary</p>
+            <div class="d-flex align-items-end gap-3 mb-3">
+              <div class="display-6 fw-bold text-primary mb-0" data-roadmap-progress-percent>{{ completion_percentage }}%</div>
+              <p class="text-secondary mb-1">{{ completed_steps }} of {{ total_steps }} steps completed</p>
+            </div>
+            <div class="progress" style="height: 0.85rem;">
+              <div
+                class="progress-bar bg-primary"
+                role="progressbar"
+                style="width: {{ completion_percentage }}%;"
+                aria-valuenow="{{ completion_percentage }}"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                data-roadmap-progress-bar></div>
+            </div>
+            <a href="{% url 'techbrat:progress_dashboard' %}" class="btn btn-outline-primary mt-4">View Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 section-surface min-vh-100">
+  <div class="container">
+    <div class="saved-gallery-card p-4 p-lg-5">
+      <div class="section-heading mb-4">
+        <div>
+          <h2 class="h4 fw-bold mb-1">Roadmap Steps</h2>
+          <p class="text-muted mb-0">Track your progress one step at a time.</p>
+        </div>
+      </div>
+
+      {% for step in steps %}
+      <div class="border rounded-4 bg-white p-4 mb-4" data-roadmap-step-card>
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
+          <div>
+            <h2 class="h5 mb-2">Step {{ forloop.counter }}: {{ step.title }}</h2>
+            <span class="badge {% if step.is_completed %}text-bg-success{% else %}text-bg-light text-secondary border{% endif %}" data-roadmap-step-status>
+              {% if step.is_completed %}Completed{% else %}Pending{% endif %}
+            </span>
+          </div>
+          <button
+            type="button"
+            class="btn {% if step.is_completed %}btn-success{% else %}btn-outline-primary{% endif %}"
+            data-roadmap-step-toggle
+            data-snapshot-id="{{ snapshot.id }}"
+            data-step-index="{{ step.index }}">
+            <i class="fas {% if step.is_completed %}fa-check-circle{% else %}fa-circle{% endif %} me-2"></i>
+            <span>{% if step.is_completed %}Mark as Incomplete{% else %}Mark as Complete{% endif %}</span>
+          </button>
+        </div>
+
+        <div>{{ step.description|linebreaks }}</div>
+        <ul class="mb-0">
+          {% for resource in step.resources %}
+          <li><a href="{{ resource.link }}" target="_blank" rel="noopener">{{ resource.title }}</a></li>
+          {% empty %}
+          <li>No resources listed.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/progress.js' %}"></script>
+{% endblock %}

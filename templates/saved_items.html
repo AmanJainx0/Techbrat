@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Saved Items - techBrat{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-bookmark"></i> Your Library
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Everything you saved across the product in one place.</h1>
+        <p class="page-hero-copy mb-0">
+          Revisit saved courses, books, tools, tips, roadmaps, and generated plans without hunting through multiple pages.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h4 fw-bold text-primary mb-3">Saved Items</h2>
+            <div class="hero-summary-list">
+              <div class="hero-summary-item">
+                <i class="fas fa-layer-group"></i>
+                <span>One gallery for both static resources and generated snapshots.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-link"></i>
+                <span>Every card links back to the original detail experience.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-rotate-left"></i>
+                <span>Unsaving updates both the gallery and the header count instantly.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 section-surface min-vh-100">
+  <div class="container">
+    {% if roadmap_snapshot_count %}
+    <div class="feature-panel card mb-4">
+      <div class="card-body p-4 p-lg-5">
+        <div class="section-heading mb-3">
+          <div>
+            <p class="text-uppercase text-muted small fw-semibold mb-1">Progress Snapshot</p>
+            <h2 class="h4 fw-bold mb-0">Saved roadmap progress</h2>
+          </div>
+          <a href="{% url 'techbrat:progress_dashboard' %}" class="btn btn-outline-primary">Open Dashboard</a>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="border rounded-4 bg-white p-3 h-100">
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Saved Roadmaps</div>
+              <div class="h3 mb-0">{{ roadmap_snapshot_count }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded-4 bg-white p-3 h-100">
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Completed Steps</div>
+              <div class="h3 mb-0">{{ completed_roadmap_steps }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded-4 bg-white p-3 h-100">
+              <div class="text-muted small text-uppercase fw-semibold mb-1">Tracked Steps</div>
+              <div class="h3 mb-0">{{ total_roadmap_steps }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="section-heading">
+      <div>
+        <h2 class="h2 fw-bold mb-1">Saved Items</h2>
+        <p class="text-muted mb-0">Everything you bookmarked across courses, books, tools, tips, and generated plans.</p>
+      </div>
+      <span class="section-meta-badge">
+        <span data-saved-count>{{ saved_items|length }}</span> saved
+      </span>
+    </div>
+
+    <div class="row g-4" data-saved-gallery>
+      {% for item in saved_items %}
+      <div class="col-md-6 col-xl-4" data-saved-card>
+        <div class="saved-gallery-card h-100 p-4">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <span class="saved-gallery-pill">{{ item.content_type.model }}</span>
+            <small class="text-muted">{{ item.created_at|date:"M d, Y" }}</small>
+          </div>
+
+          {% if item.content_object %}
+          <h2 class="h5 fw-bold mb-2">{{ item.item_title }}</h2>
+          <p class="text-muted mb-4">
+            {% if item.content_object.description %}
+            {{ item.content_object.description|truncatewords:24 }}
+            {% elif item.content_object.explanation %}
+            {{ item.content_object.explanation|truncatewords:24 }}
+            {% elif item.content_object.summary %}
+            {{ item.content_object.summary|truncatewords:24 }}
+            {% else %}
+            Saved for later.
+            {% endif %}
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{{ item.content_object.get_absolute_url }}" class="btn btn-primary">View</a>
+            <button
+              type="button"
+              class="save-toggle-btn is-saved"
+              data-object-id="{{ item.object_id }}"
+              data-content-type="{{ item.content_type.model }}"
+              data-saved="true"
+              data-remove-card-on-unsave="true">
+              <i class="fas fa-bookmark"></i>
+              <span data-save-label>Saved</span>
+            </button>
+          </div>
+          {% else %}
+          <h2 class="h5 fw-bold mb-2">Unavailable item</h2>
+          <p class="text-muted mb-0">This saved entry no longer points to an existing object.</p>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="saved-gallery-card p-5 text-center">
+          <h2 class="h4 fw-bold mb-2">No saved items yet</h2>
+          <p class="text-muted mb-4">Use the save button on courses, books, tools, or tips to build your own shortlist.</p>
+          <a href="{% url 'techbrat:courses' %}" class="btn btn-primary">Explore Resources</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

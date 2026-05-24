@@ -99,11 +99,24 @@ function createToolCard(tool) {
   
   const link = clone.getElementById('toolLink');
   link.href = tool.link || '#';
-  
-  if (tool.is_ai_generated) {
-    clone.getElementById('aiGeneratedBadge').innerHTML = '<i class="fas fa-sparkles me-1"></i>AI-discovered';
+
+  const detailsLink = clone.getElementById('toolDetails');
+  if (tool.detail_url) {
+    detailsLink.href = tool.detail_url;
+    detailsLink.classList.remove('d-none');
   }
 
+  const saveButton = clone.getElementById('toolSave');
+  if (tool.id) {
+    saveButton.dataset.objectId = tool.id;
+    saveButton.dataset.contentType = tool.content_type || 'tool';
+    saveButton.dataset.saved = tool.saved ? 'true' : 'false';
+    saveButton.classList.toggle('is-saved', Boolean(tool.saved));
+    saveButton.classList.remove('d-none');
+    saveButton.querySelector('i').className = tool.saved ? 'fas fa-bookmark' : 'far fa-bookmark';
+    saveButton.querySelector('[data-save-label]').textContent = tool.saved ? 'Saved' : 'Save';
+  }
+  
   // Add difficulty-based styling
   const diffBadge = clone.getElementById('toolDifficulty');
   if (tool.difficulty === 'intermediate') {

@@ -6,11 +6,11 @@ and generates tool recommendations via AI fallback.
 """
 
 import json
-import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from techbrat.models import Tool
+from utils.openrouter_client import post_openrouter
 
 
 # ─── Non-Tech Keywords (Fast Filter) ───────────────────────────
@@ -47,7 +47,7 @@ def is_query_tech_related(query):
         return True, ""
     
     try:
-        response = requests.post(
+        response = post_openrouter(
             'https://openrouter.ai/api/v1/chat/completions',
             headers={
                 'Authorization': f'Bearer {api_key}',
@@ -145,7 +145,7 @@ Examples of GOOD tools to generate:
 Generate NOW:"""
 
     try:
-        response = requests.post(
+        response = post_openrouter(
             'https://openrouter.ai/api/v1/chat/completions',
             headers={
                 'Authorization': f'Bearer {api_key}',

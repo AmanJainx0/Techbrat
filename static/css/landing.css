@@ -77,19 +77,43 @@ body {
   padding: 4rem 0 3rem;
 }
 
-.brand-chip {
-  display: inline-flex;
+.landing-nav {
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 1.5rem;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.brand-chip img {
-  width: min(240px, 62vw);
-  height: auto;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.22));
+.landing-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nav-link-btn {
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #eef4ff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.nav-link-btn:hover {
+  color: #fff;
+  border-color: rgba(136, 197, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.nav-link-primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, #2563eb, #0891b2);
 }
 
 .hero h1 {
@@ -524,6 +548,11 @@ body {
   .hero {
     min-height: auto;
     padding-top: 3.25rem;
+  }
+
+  .landing-nav {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .hero h1 {

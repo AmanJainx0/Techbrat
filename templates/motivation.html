@@ -8,8 +8,47 @@
 <link rel="stylesheet" href="{% static 'css/motivation.css' %}">
 {% endblock %}
 
+{% block body_class %}motivation-page{% endblock %}
+
 {% block content %}
-<section class="py-5 bg-light">
+<section class="page-hero">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <span class="page-hero-badge mb-3">
+                    <i class="fas fa-fire"></i> Momentum & Tips
+                </span>
+                <h1 class="page-hero-title fw-bold mb-3">Stay consistent, stay sharp, and keep moving forward.</h1>
+                <p class="page-hero-copy mb-0">
+                    Use daily motivation and practical learning advice to maintain energy, protect momentum, and turn small wins into steady progress.
+                </p>
+            </div>
+            <div class="col-lg-5">
+                <div class="feature-panel card h-100">
+                    <div class="card-body p-4 p-lg-5">
+                        <h2 class="h4 fw-bold text-primary mb-3">Why this matters</h2>
+                        <div class="hero-summary-list">
+                            <div class="hero-summary-item">
+                                <i class="fas fa-repeat"></i>
+                                <span>Consistency helps more than occasional motivation spikes.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-bolt"></i>
+                                <span>Each tip is meant to produce one clear action, not vague inspiration.</span>
+                            </div>
+                            <div class="hero-summary-item">
+                                <i class="fas fa-fire"></i>
+                                <span>Your current streak: {{ streak }} day{{ streak|pluralize }}.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 section-surface">
     <div class="container">
         <div class="hero-boost shadow-sm">
             <div class="hero-boost-content">
@@ -182,6 +221,15 @@
         <h3 id="tipTitle"></h3>
         <p id="tipExplanation" class="tip-explanation"></p>
         <div id="tipAction" class="tip-action"></div>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="#" class="btn btn-outline-primary btn-sm d-none" id="tipDetails">
+                <i class="fas fa-up-right-from-square me-1"></i>View Details
+            </a>
+            <button type="button" class="save-toggle-btn d-none" id="tipSave">
+                <i class="far fa-bookmark"></i>
+                <span data-save-label>Save</span>
+            </button>
+        </div>
     </article>
 </template>
 {% endblock %}

@@ -2,6 +2,8 @@ import requests
 from django.conf import settings
 from django.core.cache import cache
 import random
+from urllib.parse import quote
+from utils.openrouter_client import post_openrouter
 
 TECH_NORMALIZATION_MAP = {
     "redi": "Redis",
@@ -22,6 +24,18 @@ TECH_ALTERNATIVES = [
     "Cloud Computing, Mobile Development, or Data Science",
     "Backend Architecture, Frontend Development, or DevOps"
 ]
+
+TECH_KEYWORDS = {
+    "api", "apis", "backend", "frontend", "fullstack", "web", "website",
+    "django", "flask", "fastapi", "react", "nextjs", "node", "node.js",
+    "python", "javascript", "typescript", "java", "c++", "c#", "go",
+    "rust", "sql", "mysql", "postgres", "mongodb", "redis", "database",
+    "databases", "docker", "kubernetes", "devops", "cloud", "aws", "azure",
+    "gcp", "linux", "git", "github", "programming", "software", "coding",
+    "code", "developer", "development", "system design", "ai", "ml",
+    "machine learning", "artificial intelligence", "data science",
+    "cybersecurity", "security"
+}
 
 # Only obvious non-tech words (NOT exhaustive)
 NON_TECH_KEYWORDS = [
@@ -47,9 +61,14 @@ def get_alternative_suggestions() -> str:
     return random.choice(TECH_ALTERNATIVES)
 
 
+def contains_obvious_tech(text: str) -> bool:
+    text = text.lower()
+    return any(keyword in text for keyword in TECH_KEYWORDS)
+
+
 def ai_is_tech_related(query: str) -> bool:
     try:
-        response = requests.post(
+        response = post_openrouter(
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
                 "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
@@ -105,7 +124,7 @@ def is_tech_query(query: str) -> bool:
 
     query = query.strip().lower()
 
-    cache_key = f"tech_check_{query}"
+    cache_key = f"tech_check_{quote(query, safe='')}"
     cached = cache.get(cache_key)
 
     if cached is not None:
@@ -115,6 +134,11 @@ def is_tech_query(query: str) -> bool:
     if is_obviously_non_tech(query):
         cache.set(cache_key, False, 3600)
         return False
+
+    # Fast acceptance for common tech terms so valid prompts don't depend on AI/network
+    if contains_obvious_tech(query):
+        cache.set(cache_key, True, 3600)
+        return True
 
     # AI validation
     result = ai_is_tech_related(query)

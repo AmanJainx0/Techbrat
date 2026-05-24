@@ -67,6 +67,20 @@
         <p class="value">{{ skills|length }} total</p>
       </div>
     </div>
+    <div class="col-12">
+      <div class="card dashboard-card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center">
+            <div>
+              <p class="text-uppercase text-muted small mb-1">Job Readiness</p>
+              <h5 class="mb-1">{{ readiness.score }}% · {{ readiness.label }}</h5>
+              <p class="text-muted mb-0">Open the guidance tools from the home page to see your full readiness, skill-gap, and action breakdown.</p>
+            </div>
+            <a href="{% url 'techbrat:index' %}#career-growth-tools" class="btn btn-outline-primary">Open Guidance Tools</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="row g-4">

@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}techBrat{% endblock %}
+{% block body_class %}index-page{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -149,51 +150,88 @@
   </div>
 </section>
 
+<section id="career-growth-tools" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" style="color: #2563eb">Career Growth Tools</h2>
+      <p class="text-secondary">
+        Open the main growth hub for progress and planning, then use the hiring tools separately when you're ready to target opportunities.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/combo-chart--v1.png" class="mx-auto mb-3" alt="Job Readiness" width="80" />
+          <h5 class="fw-bold text-primary">Career Growth Hub</h5>
+          <p>Track progress, readiness, skill gaps, action plans, portfolio guidance, and apply-readiness in one place.</p>
+          <a href="{% url 'techbrat:progress_dashboard' %}" class="btn btn-success mt-2">Open Growth Hub</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/paper-plane.png" class="mx-auto mb-3" alt="Application Readiness" width="80" />
+          <h5 class="fw-bold text-primary">Opportunity Hub</h5>
+          <p>See matched internships and jobs, a hiring calendar, company prep timelines, and relevant opening alerts.</p>
+          <a href="{% url 'techbrat:opportunity_hub' %}" class="btn btn-success mt-2">Explore Opportunities</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <img src="https://img.icons8.com/color/96/briefcase--v1.png" class="mx-auto mb-3" alt="Portfolio Guidance" width="80" />
+          <h5 class="fw-bold text-primary">Company Prep</h5>
+          <p>Create a focused company-specific preparation plan once you know the role or company you're targeting.</p>
+          <a href="{% url 'techbrat:company_prep' %}" class="btn btn-success mt-2">Prepare for Company</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Learning Journey Section -->
 <section id="learning-journey" class="py-5 bg-light">
   <div class="container">
     <div class="text-center mb-5">
-      <h2 class="fw-bold" style="color: #2563eb">Your Learning Journey</h2>
+      <h2 class="fw-bold text-primary">Your Learning Journey</h2>
       <p class="text-secondary">
         Track your progress, tackle challenges, and get guidance at every
         step.
       </p>
     </div>
     <div class="row g-4">
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 text-center p-4 shadow-sm">
-          <img src="https://static.thenounproject.com/png/progress-tracker-icon-6135757-512.png" class="mx-auto mb-3"
-            alt="Progress" width="80" />
-          <h5 class="fw-bold" style="color: #2563eb">Progress Tracker</h5>
-          <p>
-            Visualize your roadmap completion and see how far you’ve come.
-          </p>
-          <a href="#" class="btn btn-success mt-2 future-feature">View Progress</a>
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 text-center p-4 shadow-sm d-flex flex-column">
+            <img src="https://img.icons8.com/color/96/bookmark-ribbon--v1.png" class="mx-auto mb-3" alt="Saved Items"
+              width="80" />
+            <h5 class="fw-bold text-primary">Saved Items</h5>
+            <p>
+              Revisit your saved resources, career paths, roadmaps, and generated guidance whenever you need them.
+            </p>
+            <a href="{% url 'techbrat:saved_items' %}" class="btn btn-success mt-auto">Open Saved</a>
+          </div>
         </div>
-      </div>
 
       <div class="col-md-6 col-lg-4">
-        <div class="card h-100 text-center p-4 shadow-sm">
+        <div class="card h-100 text-center p-4 shadow-sm d-flex flex-column">
           <img src="https://cdn-icons-png.flaticon.com/512/1828/1828925.png" class="mx-auto mb-3" alt="Motivation"
             width="80" />
-          <h5 class="fw-bold" style="color: #2563eb">Motivation & Tips</h5>
+          <h5 class="fw-bold text-primary">Motivation & Tips</h5>
           <p>
             Receive encouraging tips, reminders, and productivity
             suggestions to stay consistent.
           </p>
-          <a href="{% url 'techbrat:motivation' %}" class="btn btn-success mt-2">Stay Motivated</a>
+          <a href="{% url 'techbrat:motivation' %}" class="btn btn-success mt-auto">Stay Motivated</a>
         </div>
       </div>
       <div class="col-md-6 col-lg-4">
-        <div class="card h-100 text-center p-4 shadow-sm">
+        <div class="card h-100 text-center p-4 shadow-sm d-flex flex-column">
           <img src="https://img.icons8.com/color/96/000000/helping-hand.png" class="mx-auto mb-3" alt="Assistance"
             width="80" />
-          <h5 class="fw-bold" style="color: #2563eb">Issue Assistance</h5>
+          <h5 class="fw-bold text-primary">Issue Assistance</h5>
           <p>
             Report learning difficulties or confusion and get
             beginner-friendly explanations.
           </p>
-          <a href="{% url 'techbrat:issue' %}" class="btn btn-success mt-2">
+          <a href="{% url 'techbrat:issue' %}" class="btn btn-success mt-auto">
             Get Help
           </a>
 
@@ -209,7 +247,7 @@
     <div class="text-center mb-5">
       <h2 class="fw-bold text-primary">Get in Touch</h2>
       <p class="text-secondary">
-        Have questions or feedback? We’d love to hear from you.
+        Have questions or feedback? We'd love to hear from you.
       </p>
     </div>
     <div class="row g-4">
@@ -256,5 +294,4 @@
   </div>
 </section>
 
-</section>
 {% endblock %}

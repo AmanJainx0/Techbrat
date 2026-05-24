@@ -1,189 +1,236 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Discover Courses — techBrat{% endblock %}
+{% block title %}Discover Courses - techBrat{% endblock %}
 
 {% block extra_head %}
 <meta name="description"
-    content="AI-powered course discovery platform. Find the best tech courses from Coursera, Udemy, and more." />
+    content="Course discovery platform. Find the best tech courses from Coursera, Udemy, and more." />
 <link rel="stylesheet" href="{% static 'css/course.css' %}" />
 {% endblock %}
 
 {% block body_class %}courses-page{% endblock %}
 
 {% block content %}
-<!-- ═══════════ HERO BANNER ═══════════ -->
-<section class="courses-hero">
-    <div class="hero-content">
-        <h1>
-            <span class="hero-ai-icon"><i class="fas fa-brain"></i></span>
-            Course Discovery
-        </h1>
-        <div id="personalization-banner-text">
-            {% if is_personalized %}
-            <p class="hero-subtitle">
-                <i class="fas fa-magic hero-personalization-icon"></i>
-                Personalized for <strong>{{ domains|default:"Tech Enthusiasts" }}</strong> —
-                Level: <strong>{{ user_level|title }}</strong>
-            </p>
-            {% else %}
-            <p class="hero-subtitle">Explore our curated collection of tech courses powered by AI recommendations.</p>
-            {% endif %}
-        </div>
-        <div class="hero-stats">
-            <div class="hero-stat"><i class="fas fa-robot"></i> <strong>AI-Enhanced</strong></div>
-            <div class="hero-stat"><i class="fas fa-globe"></i> <strong>Global Platforms</strong></div>
-            <div class="hero-stat"><i class="fas fa-bolt"></i> <strong>Real-Time Filters</strong></div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════════ MAIN LAYOUT ═══════════ -->
-<div class="courses-layout">
-
-    <!-- ── FILTER SIDEBAR ── -->
-    <aside class="filter-sidebar" id="filter-sidebar">
-        <button class="mobile-sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button>
-
-        <div class="sidebar-header">
-            <h3><i class="fas fa-sliders-h"></i> Filters</h3>
-            <button id="reset-filters">Reset All</button>
-        </div>
-
-        <!-- Level -->
-        <div class="filter-group">
-            <div class="filter-group-title">Experience Level</div>
-            <div class="filter-pills" id="level-pills">
-                <div class="filter-pill active" data-value="beginner">Beginner</div>
-                <div class="filter-pill" data-value="intermediate">Intermediate</div>
-                <div class="filter-pill" data-value="advanced">Advanced</div>
-            </div>
-        </div>
-
-        <!-- Learning Type -->
-        <div class="filter-group">
-            <div class="filter-group-title">Learning Type</div>
-            <div class="type-grid" id="type-cards">
-                <div class="type-card active" data-value="video">
-                    <i class="fas fa-play-circle"></i>
-                    <span>Video</span>
+<section class="courses-hero py-5">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="courses-eyebrow">Curated Resources</span>
+                <h1 class="display-5 fw-bold text-white">Find the right tech course without the noise.</h1>
+                <div id="personalization-banner-text" class="mt-3">
+                    {% if is_personalized %}
+                    <p class="lead text-white-50 mb-0">
+                        Personalized for <strong class="text-white">{{ domains|default:"Tech Enthusiasts" }}</strong>
+                        at <strong class="text-white">{{ user_level|title }}</strong> level.
+                    </p>
+                    {% else %}
+                    <p class="lead text-white-50 mb-0">
+                        Explore trusted learning paths, compare platforms, and save the best picks for later.
+                    </p>
+                    {% endif %}
                 </div>
-                <div class="type-card" data-value="text">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Text</span>
-                </div>
-                <div class="type-card" data-value="interactive">
-                    <i class="fas fa-code"></i>
-                    <span>Coding</span>
-                </div>
-                <div class="type-card" data-value="project">
-                    <i class="fas fa-project-diagram"></i>
-                    <span>Project</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pricing -->
-        <div class="filter-group">
-            <div class="filter-group-title">Pricing</div>
-            <div class="pricing-options" id="pricing-group">
-                <div class="pricing-option active" data-value="free">Free</div>
-                <div class="pricing-option" data-value="paid">Paid</div>
-                <div class="pricing-option" data-value="all">All</div>
-            </div>
-        </div>
-
-        <!-- Domain -->
-        <div class="filter-group">
-            <div class="filter-group-title">Domain</div>
-            <div class="domain-input-wrapper">
-                <i class="fas fa-search input-icon"></i>
-                <input type="text" id="domain-search" placeholder="e.g. AI, Web Dev…" autocomplete="off" />
-            </div>
-            <div class="domain-tags" id="domain-tags"></div>
-        </div>
-
-        <!-- Apply -->
-        <button id="apply-filters-btn">
-            <i class="fas fa-bolt"></i> Apply Filters
-        </button>
-    </aside>
-
-    <!-- ── COURSE GRID ── -->
-    <main class="courses-main">
-        <div class="grid-header">
-            <h2>Recommended Courses</h2>
-            <span class="course-count" id="course-count">—</span>
-        </div>
-
-        <div class="courses-grid" id="course-list-container">
-            {% for course in courses %}
-            <div class="course-card">
-                <div class="card-accent"></div>
-                <div class="card-body">
-                    <div class="card-badges">
-                        <span class="badge badge-level">{{ course.get_level_display }}</span>
-                        {% if course.is_ai_generated %}
-                        <span class="badge badge-ai"><i class="fas fa-robot"></i> AI</span>
-                        {% endif %}
-                        <span class="badge {% if course.is_free %}badge-free{% else %}badge-paid{% endif %}">
-                            {% if course.is_free %}Free{% else %}Paid{% endif %}
-                        </span>
+                <div class="hero-stats mt-4">
+                    <div class="hero-stat">
+                        <span class="hero-stat-icon"><i class="fas fa-compass"></i></span>
+                        <div>
+                            <strong>Smart Matching</strong>
+                            <small>Sharper recommendations</small>
+                        </div>
                     </div>
-                    <h3 class="card-title">{{ course.title }}</h3>
-                    <div class="card-platform"><i class="fas fa-building"></i> {{ course.platform }}</div>
-                    <p class="card-description">{{ course.description|truncatewords:20 }}</p>
-                    <div class="card-meta">
-                        <span class="card-meta-item"><i class="far fa-clock"></i> {{ course.duration }}</span>
-                        <span class="card-meta-item"><i class="fas fa-graduation-cap"></i> {{
-                            course.get_learning_type_display }}</span>
+                    <div class="hero-stat">
+                        <span class="hero-stat-icon"><i class="fas fa-book-open"></i></span>
+                        <div>
+                            <strong>Multi-Platform</strong>
+                            <small>Coursera, Udemy, and more</small>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="{{ course.link }}" target="_blank" rel="noopener" class="btn-start">
-                            Start Course <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <button class="btn-preview"
-                            data-course='{"title":"{{ course.title }}","platform":"{{ course.platform }}","desc":"{{ course.description }}","link":"{{ course.link }}","duration":"{{ course.duration }}","learning_type":"{{ course.get_learning_type_display }}"}'>
-                            <i class="fas fa-eye"></i> Preview
-                        </button>
-                    </div>
-                    <div class="preview-panel">
-                        <div class="preview-platform">{{ course.platform }}</div>
-                        <div class="preview-description">{{ course.description }}</div>
-                        <div class="preview-meta">
-                            <span class="preview-meta-item"><i class="far fa-clock"></i> {{ course.duration }}</span>
-                            <span class="preview-meta-item"><i class="fas fa-graduation-cap"></i> {{
-                                course.get_learning_type_display }}</span>
+                    <div class="hero-stat">
+                        <span class="hero-stat-icon"><i class="fas fa-bookmark"></i></span>
+                        <div>
+                            <strong>Save As You Go</strong>
+                            <small>Keep your shortlist ready</small>
                         </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="empty-state">
-                <div class="empty-icon"><i class="fas fa-search"></i></div>
-                <h3>No courses found</h3>
-                <p>Try adjusting your filters or adding different domains to discover new courses.</p>
+            <div class="col-lg-5">
+                <div class="hero-summary card border-0 shadow-sm">
+                    <div class="card-body p-4 p-lg-5">
+                        <h2 class="h4 fw-bold text-primary mb-3">Course Discovery</h2>
+                        <p class="text-secondary mb-4">
+                            Filter by level, learning style, price, and domain to surface the courses that fit your
+                            current goal.
+                        </p>
+                        <div class="summary-pills">
+                            <span class="summary-pill">Beginner to Advanced</span>
+                            <span class="summary-pill">Video, Text, Coding, Project</span>
+                            <span class="summary-pill">Preview, Details, Save</span>
+                        </div>
+                        <button class="btn btn-success mt-4 d-lg-none" id="mobile-filter-toggle" type="button">
+                            <i class="fas fa-sliders-h me-2"></i>Open Filters
+                        </button>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
         </div>
-    </main>
-</div>
+    </div>
+</section>
 
-<!-- ═══════════ MOBILE FILTER TOGGLE ═══════════ -->
-<button class="mobile-filter-toggle" id="mobile-filter-toggle">
-    <i class="fas fa-sliders-h"></i> Filters
-</button>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-xl-3">
+                <aside class="filter-sidebar card border-0 shadow-sm" id="filter-sidebar">
+                    <button class="mobile-sidebar-close" id="sidebar-close" type="button" aria-label="Close filters">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h2 class="h5 fw-bold text-primary mb-1">Filters</h2>
+                                <p class="text-secondary small mb-0">Refine your course list instantly.</p>
+                            </div>
+                            <button id="reset-filters" type="button">Reset</button>
+                        </div>
 
-<!-- Filter Overlay -->
+                        <div class="filter-group">
+                            <div class="filter-group-title">Experience Level</div>
+                            <div class="filter-pills" id="level-pills">
+                                <div class="filter-pill active" data-value="beginner">Beginner</div>
+                                <div class="filter-pill" data-value="intermediate">Intermediate</div>
+                                <div class="filter-pill" data-value="advanced">Advanced</div>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-group-title">Learning Type</div>
+                            <div class="type-grid" id="type-cards">
+                                <div class="type-card active" data-value="video">
+                                    <i class="fas fa-play-circle"></i>
+                                    <span>Video</span>
+                                </div>
+                                <div class="type-card" data-value="text">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Text</span>
+                                </div>
+                                <div class="type-card" data-value="interactive">
+                                    <i class="fas fa-code"></i>
+                                    <span>Coding</span>
+                                </div>
+                                <div class="type-card" data-value="project">
+                                    <i class="fas fa-diagram-project"></i>
+                                    <span>Project</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-group-title">Pricing</div>
+                            <div class="pricing-options" id="pricing-group">
+                                <div class="pricing-option active" data-value="free">Free</div>
+                                <div class="pricing-option" data-value="paid">Paid</div>
+                                <div class="pricing-option" data-value="all">All</div>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="filter-group-title">Domain</div>
+                            <div class="domain-input-wrapper">
+                                <i class="fas fa-search input-icon"></i>
+                                <input type="text" id="domain-search" placeholder="e.g. AI, Web Dev" autocomplete="off" />
+                            </div>
+                            <div class="domain-helper">Press Enter to add multiple domains.</div>
+                            <div class="domain-tags" id="domain-tags"></div>
+                        </div>
+
+                        <button id="apply-filters-btn" type="button">
+                            <i class="fas fa-bolt"></i> Apply Filters
+                        </button>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="col-lg-8 col-xl-9">
+                <div class="results-shell">
+                    <div class="results-head d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h2 class="fw-bold text-primary mb-1">Recommended Courses</h2>
+                            <p class="text-secondary mb-0">Browse, preview, save, and jump directly into learning.</p>
+                        </div>
+                        <span class="course-count" id="course-count">-</span>
+                    </div>
+
+                    <div class="courses-grid" id="course-list-container">
+                        {% for course in courses %}
+                        <div class="course-card card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="card-badges">
+                                    <span class="badge badge-level">{{ course.get_level_display }}</span>
+                                    <span class="badge {% if course.is_free %}badge-free{% else %}badge-paid{% endif %}">
+                                        {% if course.is_free %}Free{% else %}Paid{% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="course-platform mb-2">
+                                    <i class="fas fa-building me-2"></i>{{ course.platform }}
+                                </div>
+                                <h3 class="card-title h5">{{ course.title }}</h3>
+                                <p class="card-description">{{ course.description|truncatewords:20 }}</p>
+
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock me-2"></i>{{ course.duration }}</span>
+                                    <span><i class="fas fa-graduation-cap me-2"></i>{{ course.get_learning_type_display }}</span>
+                                </div>
+
+                                <div class="card-footer mt-auto">
+                                    <a href="{{ course.link }}" target="_blank" rel="noopener" class="btn btn-success btn-start">
+                                        Start Course
+                                    </a>
+                                    <a href="{{ course.get_absolute_url }}" class="btn btn-outline-primary btn-details">
+                                        Details
+                                    </a>
+                                    <button
+                                        type="button"
+                                        class="save-toggle-btn course-save-btn btn btn-outline-secondary {% if course.id in saved_course_ids %}is-saved{% endif %}"
+                                        data-object-id="{{ course.id }}"
+                                        data-content-type="course"
+                                        data-saved="{% if course.id in saved_course_ids %}true{% else %}false{% endif %}">
+                                        <i class="{% if course.id in saved_course_ids %}fas{% else %}far{% endif %} fa-bookmark"></i>
+                                        <span data-save-label>{% if course.id in saved_course_ids %}Saved Course{% else %}Save Course{% endif %}</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-secondary btn-preview"
+                                        data-course='{"title":"{{ course.title }}","platform":"{{ course.platform }}","desc":"{{ course.description }}","link":"{{ course.link }}","duration":"{{ course.duration }}","learning_type":"{{ course.get_learning_type_display }}"}'>
+                                        Preview
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="fas fa-search"></i></div>
+                            <h3>No courses found</h3>
+                            <p>Try adjusting your filters or adding different domains to discover new courses.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div class="filter-overlay" id="filter-overlay"></div>
 
-<!-- ═══════════ PREVIEW MODAL (Mobile) ═══════════ -->
-<div class="modal fade" id="previewModal" tabindex="-1">
+<div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="modalPlatform"></div>
@@ -196,11 +243,9 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_scripts %}
-<!-- ═══════════ DATA + SCRIPTS ═══════════ -->
 {{ user_level|json_script:"user-level-data" }}
 {{ domains|default:""|json_script:"user-domains-data" }}
 <script src="{% static 'js/course.js' %}"></script>

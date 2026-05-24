@@ -2,65 +2,202 @@
 {% load static %}
 
 {% block title %}Tech Career Questionnaire{% endblock %}
+{% block body_class %}career-page{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <h2 class="text-center mb-4 text-primary">Tech Career Questionnaire</h2>
-  <p class="text-center mb-5 text-secondary">
-    Answer a few questions and get beginner-friendly career recommendations!
-  </p>
-
-  <form id="studentForm">
-    {% csrf_token %}
-    <div class="row g-3">
-
-      <div class="col-md-6">
-        <label for="education_level" class="form-label">Education Level</label>
-        <select class="form-select" id="education_level" name="education_level" required>
-          <option value="" selected disabled>Select Level</option>
-          <option>High School</option>
-          <option>Undergraduate</option>
-          <option>Postgraduate</option>
-          <option>Other</option>
-        </select>
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-compass"></i> Career Direction
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Find a tech path that fits your strengths, pace, and goals.</h1>
+        <p class="page-hero-copy mb-0">
+          Answer a few guided questions and get beginner-friendly career recommendations with clearer reasoning and next steps.
+        </p>
       </div>
-      <div class="col-md-6">
-        <label for="interests" class="form-label">Interests / Hobbies</label>
-        <input type="text" class="form-control" id="interests" name="interests" placeholder="E.g. games, AI, design"
-          required />
-      </div>
-      <div class="col-md-6">
-        <label for="skills" class="form-label">Skills</label>
-        <input type="text" class="form-control" id="skills" name="skills" placeholder="E.g. problem-solving, math"
-          required />
-      </div>
-      <div class="col-md-6">
-        <label for="learning_style" class="form-label">Preferred Learning Style</label>
-        <select class="form-select" id="learning_style" name="learning_style" required>
-          <option value="" selected disabled>Select Style</option>
-          <option>Visual / Video</option>
-          <option>Hands-on / Interactive</option>
-          <option>Reading / Books</option>
-          <option>Mixed / Any</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <label for="career_goal" class="form-label">Career Goal (if any)</label>
-        <input type="text" class="form-control" id="career_goal" name="career_goal"
-          placeholder="E.g. become a developer" />
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h4 fw-bold text-primary mb-3">What you will get</h2>
+            <div class="hero-summary-list">
+              <div class="hero-summary-item">
+                <i class="fas fa-user-check"></i>
+                <span>Recommendations based on your aptitude, interests, and goals.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>A simpler explanation of why a path fits you.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-map"></i>
+                <span>A practical beginner roadmap to start with confidence.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="text-center mt-4">
-      <button type="submit" class="btn btn-success btn-lg">
-        Get Recommendations
-      </button>
-    </div>
-  </form>
+  </div>
+</section>
 
-  <div id="results" class="mt-5"></div>
-</div>
+<section class="py-5 section-surface">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-10">
+        <div class="tb-form-shell card">
+          <div class="card-body p-4 p-lg-5">
+            <div class="section-heading mb-4">
+              <div>
+                <p class="text-uppercase text-muted small fw-semibold mb-1">Questionnaire</p>
+                <h2 class="h4 fw-bold mb-0">Tell us where you are starting from</h2>
+              </div>
+              <span class="section-meta-badge">Personalized</span>
+            </div>
+            <form id="studentForm">
+              {% csrf_token %}
+              <div class="row g-3">
+
+                <div class="col-md-6">
+                  <label for="education_level" class="form-label">Education Level</label>
+                  <select class="form-select" id="education_level" name="education_level" required>
+                    <option value="" selected disabled>Select Level</option>
+                    <option>High School</option>
+                    <option>Undergraduate</option>
+                    <option>Postgraduate</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="interests" class="form-label">Interests / Hobbies</label>
+                  <input type="text" class="form-control" id="interests" name="interests" placeholder="E.g. games, AI, design"
+                    required />
+                </div>
+                <div class="col-md-4">
+                  <label for="math_level" class="form-label">Math Level</label>
+                  <select class="form-select" id="math_level" name="math_level" required>
+                    <option value="" selected disabled>Select level</option>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="logic_level" class="form-label">Logical Thinking</label>
+                  <select class="form-select" id="logic_level" name="logic_level" required>
+                    <option value="" selected disabled>Select level</option>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="problem_solving" class="form-label">Problem Solving</label>
+                  <select class="form-select" id="problem_solving" name="problem_solving" required>
+                    <option value="" selected disabled>Select level</option>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="skills" class="form-label">Skills</label>
+                  <input type="text" class="form-control" id="skills" name="skills" placeholder="E.g. problem-solving, math"
+                    required />
+                </div>
+                <div class="col-md-6">
+                  <label for="background" class="form-label">Background</label>
+                  <input type="text" class="form-control" id="background" name="background" placeholder="E.g. commerce student, self-taught, CS graduate"
+                    required />
+                </div>
+                <div class="col-md-6">
+                  <label for="learning_style" class="form-label">Preferred Learning Style</label>
+                  <select class="form-select" id="learning_style" name="learning_style" required>
+                    <option value="" selected disabled>Select Style</option>
+                    <option>Visual / Video</option>
+                    <option>Hands-on / Interactive</option>
+                    <option>Reading / Books</option>
+                    <option>Mixed / Any</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="career_goal" class="form-label">Career Goal (if any)</label>
+                  <input type="text" class="form-control" id="career_goal" name="career_goal"
+                    placeholder="E.g. become a developer" />
+                </div>
+                <div class="col-md-6">
+                  <label for="career_goals" class="form-label">Long-Term Career Goals</label>
+                  <input type="text" class="form-control" id="career_goals" name="career_goals"
+                    placeholder="E.g. high salary, remote job, startup, freelancing" />
+                </div>
+                <div class="col-md-3">
+                  <label for="hours_per_week" class="form-label">Hours Per Week</label>
+                  <input type="number" min="1" class="form-control" id="hours_per_week" name="hours_per_week" placeholder="10" required />
+                </div>
+                <div class="col-md-3">
+                  <label for="timeline" class="form-label">Target Timeline</label>
+                  <select class="form-select" id="timeline" name="timeline" required>
+                    <option value="" selected disabled>Select timeline</option>
+                    <option>3 months</option>
+                    <option>6 months</option>
+                    <option>12 months</option>
+                    <option>18+ months</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="work_preference" class="form-label">Work Preference</label>
+                  <select class="form-select" id="work_preference" name="work_preference" required>
+                    <option value="" selected disabled>Select preference</option>
+                    <option>Remote</option>
+                    <option>Hybrid</option>
+                    <option>On-site</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="risk_appetite" class="form-label">Risk Appetite</label>
+                  <select class="form-select" id="risk_appetite" name="risk_appetite" required>
+                    <option value="" selected disabled>Select level</option>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="preferred_work_style" class="form-label">Preferred Work Style</label>
+                  <select class="form-select" id="preferred_work_style" name="preferred_work_style">
+                    <option value="">Select work style</option>
+                    <option>Freelance</option>
+                    <option>Job</option>
+                    <option>Startup</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="location_preference" class="form-label">Location Preference</label>
+                  <select class="form-select" id="location_preference" name="location_preference">
+                    <option value="">Select location preference</option>
+                    <option>India</option>
+                    <option>Remote</option>
+                    <option>Abroad</option>
+                  </select>
+                </div>
+              </div>
+              <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-4">
+                  Get Recommendations
+                </button>
+              </div>
+            </form>
+
+            <div id="results" class="mt-5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/que.js' %}"></script>
+<script src="{% static 'js/career_paths_page.js' %}"></script>
 {% endblock %}

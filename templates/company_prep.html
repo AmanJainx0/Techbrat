@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Prepare for a Company - techBrat{% endblock %}
+
+{% block body_class %}company-prep-page{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-7">
+        <span class="page-hero-badge mb-3">
+          <i class="fas fa-building"></i> Interview Readiness
+        </span>
+        <h1 class="page-hero-title fw-bold mb-3">Prepare for your target company with a focused study plan.</h1>
+        <p class="page-hero-copy mb-0">
+          Enter your role, strengths, weak areas, and time budget to generate a structured prep plan you can save and revisit later.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="feature-panel card h-100">
+          <div class="card-body p-4 p-lg-5">
+            <h2 class="h4 fw-bold text-primary mb-3">What you’ll get</h2>
+            <div class="hero-summary-list">
+              <div class="hero-summary-item">
+                <i class="fas fa-route"></i>
+                <span>Company-aware hiring process and prep priorities.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-clock"></i>
+                <span>A realistic roadmap based on your available study time.</span>
+              </div>
+              <div class="hero-summary-item">
+                <i class="fas fa-bookmark"></i>
+                <span>A plan you can save directly into your gallery.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 section-surface min-vh-100">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="tb-form-shell card h-100">
+          <div class="card-body p-4">
+            <div class="section-heading mb-4">
+              <div>
+                <p class="text-uppercase text-muted small fw-semibold mb-1">Prep Inputs</p>
+                <h2 class="h4 fw-bold mb-0">Build your target-company plan</h2>
+              </div>
+            </div>
+            <form id="companyPrepForm">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label for="company" class="form-label">Company</label>
+                <input class="form-control" id="company" name="company" list="companyOptions" placeholder="Type or select a company" required>
+                <datalist id="companyOptions">
+                  <option value="Google"></option>
+                  <option value="Microsoft"></option>
+                  <option value="Amazon"></option>
+                  <option value="Meta"></option>
+                  <option value="Netflix"></option>
+                  <option value="Adobe"></option>
+                  <option value="Uber"></option>
+                  <option value="Atlassian"></option>
+                  <option value="TCS"></option>
+                  <option value="Infosys"></option>
+                </datalist>
+              </div>
+
+              <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role" required>
+                  <option value="" selected disabled>Select role</option>
+                  <option>Frontend Developer</option>
+                  <option>Backend Developer</option>
+                  <option>Full Stack Developer</option>
+                  <option>Data Analyst</option>
+                  <option>AI/ML Engineer</option>
+                  <option>DevOps Engineer</option>
+                  <option>QA Engineer</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="experience_level" class="form-label">Experience Level</label>
+                <select class="form-select" id="experience_level" name="experience_level">
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="skills" class="form-label">Skills</label>
+                <input type="text" class="form-control" id="skills" name="skills" placeholder="Python, Django, SQL" />
+              </div>
+
+              <div class="mb-3">
+                <label for="strong_areas" class="form-label">Strong Areas</label>
+                <input type="text" class="form-control" id="strong_areas" name="strong_areas" placeholder="APIs, debugging, React basics" />
+              </div>
+
+              <div class="mb-3">
+                <label for="weak_areas" class="form-label">Weak Areas</label>
+                <input type="text" class="form-control" id="weak_areas" name="weak_areas" placeholder="DSA, system design, testing" />
+              </div>
+
+              <div class="mb-3">
+                <label for="hours_per_day" class="form-label">Hours Per Day</label>
+                <input type="number" min="1" class="form-control" id="hours_per_day" name="hours_per_day" value="2" required />
+              </div>
+
+              <div class="mb-3">
+                <label for="total_time" class="form-label">Total Time</label>
+                <select class="form-select" id="total_time" name="total_time">
+                  <option>2 weeks</option>
+                  <option selected>1 month</option>
+                  <option>2 months</option>
+                  <option>3 months</option>
+                  <option>6 months</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="current_status" class="form-label">Current Status</label>
+                <select class="form-select" id="current_status" name="current_status">
+                  <option>Just starting</option>
+                  <option selected>Already learning</option>
+                  <option>Interview ready but inconsistent</option>
+                  <option>Need structured revision</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label for="target_package" class="form-label">Target Package (Optional)</label>
+                <input type="text" class="form-control" id="target_package" name="target_package" placeholder="e.g. 18 LPA" />
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100" id="companyPrepSubmitBtn">
+                Generate Preparation Plan
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="tb-form-shell card h-100">
+          <div class="card-body p-4">
+            <div id="result-container">
+              <div class="tb-muted-panel text-center text-muted py-5 px-4">
+                Fill the form and generate your plan to see the preparation roadmap here.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/company_prep.js' %}"></script>
+{% endblock %}

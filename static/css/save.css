@@ -1,0 +1,55 @@
+.save-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid #d7deea;
+  background: #fff;
+  color: #43526b;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.save-toggle-btn:hover {
+  border-color: #7c8fb1;
+  color: #24344d;
+}
+
+.save-toggle-btn.is-saved {
+  background: #eef4ff;
+  border-color: #7ba3ff;
+  color: #1f4ec9;
+}
+
+.save-toggle-btn[disabled] {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.course-save-btn,
+.book-save-btn {
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+}
+
+.saved-gallery-card {
+  border: 1px solid #e7edf7;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(18, 37, 63, 0.06);
+}
+
+.saved-gallery-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: #f3f7ff;
+  color: #3158b9;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
